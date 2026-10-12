@@ -187,6 +187,52 @@
   .year-chip button{
     background:transparent;border:none;color:var(--danger);font-size:15px;line-height:1;cursor:pointer;padding:2px 4px;
   }
+
+  /* ---------- Login lock screen ---------- */
+  @keyframes lockFadeIn{
+    from{opacity:0;transform:translateY(14px) scale(0.98);}
+    to{opacity:1;transform:translateY(0) scale(1);}
+  }
+  #lock-screen{
+    position:fixed;inset:0;z-index:1000;overflow:hidden;
+    background:
+      radial-gradient(circle at 18% 20%, rgba(205,169,74,0.18), transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(205,169,74,0.12), transparent 45%),
+      linear-gradient(135deg,var(--navy-900),var(--navy-700) 60%,var(--navy-600));
+    display:flex;align-items:center;justify-content:center;padding:20px;
+  }
+  #lock-screen.hidden{display:none;}
+  .lock-card{
+    position:relative;background:var(--white);border-radius:20px;padding:44px 36px 30px;max-width:380px;width:100%;
+    text-align:center;box-shadow:0 25px 70px rgba(0,0,0,0.4);
+    animation:lockFadeIn .5s ease-out;
+    border-top:4px solid var(--gold-500);
+  }
+  .lock-logo-wrap{
+    width:84px;height:84px;border-radius:18px;background:var(--white);margin:-66px auto 18px;
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
+    box-shadow:0 8px 24px rgba(22,34,63,0.25);border:1px solid var(--line);
+  }
+  .lock-logo-wrap img{width:100%;height:100%;object-fit:contain;padding:8px;}
+  .lock-card h1{font-size:21px;color:var(--navy-800);margin-bottom:6px;}
+  .lock-card p.hint{margin:0 0 22px;font-size:12.5px;}
+  .lock-input-wrap{position:relative;margin-bottom:16px;}
+  .lock-input-wrap input{
+    width:100%;text-align:center;font-size:16px;letter-spacing:3px;padding:12px 44px;
+  }
+  .lock-eye-toggle{
+    position:absolute;top:50%;left:6px;transform:translateY(-50%);
+    width:32px;height:32px;border:none;background:transparent;color:var(--ink-soft);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:50%;
+  }
+  .lock-eye-toggle:hover{background:var(--paper-alt);color:var(--navy-800);}
+  .lock-eye-toggle svg{width:18px;height:18px;}
+  .lock-submit-btn{width:100%;font-size:14.5px;padding:12px;}
+  .lock-error{
+    color:var(--danger);font-size:13px;margin-top:14px;background:var(--danger-bg);
+    border-radius:8px;padding:9px 10px;
+  }
+  .lock-footer-note{margin-top:22px;font-size:11px;color:var(--ink-soft);}
   .alerts-list{display:flex;flex-direction:column;gap:10px;}
   .alert-item{
     display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border-radius:8px;
@@ -345,7 +391,26 @@
 </head>
 <body>
 
-<div class="app">
+<div id="lock-screen">
+  <div class="lock-card">
+    <div class="lock-logo-wrap">
+      <img id="lock-logo-img" src="TechBox.jpeg" alt="شعار المؤسسة">
+    </div>
+    <h1 id="lock-org-name">TechBox</h1>
+    <p class="hint">نظام التقارير الشهرية — الرجاء إدخال كلمة المرور للمتابعة</p>
+    <div class="lock-input-wrap">
+      <input type="password" id="lock-password" placeholder="كلمة المرور" autocomplete="off">
+      <button type="button" class="lock-eye-toggle" onclick="toggleLockPasswordVisibility()" aria-label="إظهار كلمة المرور">
+        <svg id="lock-eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+    </div>
+    <button type="button" class="btn btn-gold lock-submit-btn" onclick="attemptLogin()">دخول إلى النظام</button>
+    <div id="lock-error" class="lock-error hidden"></div>
+    <div class="lock-footer-note">🔒 محمي بتشفير SHA-256</div>
+  </div>
+</div>
+
+<div class="app hidden" id="app-root">
   <aside class="sidebar">
     <div class="brand">
       <div class="brand-mark" id="sidebar-logo-mark">
@@ -392,7 +457,8 @@
     </nav>
     <div class="sidebar-footer">
      المهندس فارس منصور<br>
-     00970595438486
+     00970595438486<br>
+     <a href="#" onclick="logoutApp();return false;" style="color:#CDA94A;">🔒 تسجيل الخروج</a>
     </div>
   </aside>
 
@@ -435,28 +501,28 @@
           <div class="kpi-grid" id="dashboard-kpis" style="margin-top:20px;"></div>
 
           <div class="card" style="margin-top:20px;">
-            <div class="card-title"><span>مقارنة شهرية — البرامج والمتدربون والساعات خلال العام</span></div>
+            <div class="card-title"><span>📈 مقارنة شهرية — البرامج والمتدربون والساعات خلال العام</span></div>
             <div id="dashboard-monthly-line"></div>
           </div>
 
           <div class="dash-chart-row">
             <div class="card">
-              <div class="card-title"><span>نسبة تحقيق الخطة</span></div>
+              <div class="card-title"><span>🎯 نسبة تحقيق الخطة</span></div>
               <div id="dashboard-gauge"></div>
             </div>
             <div class="card">
-              <div class="card-title"><span>أكثر الأقسام نشاطًا</span></div>
+              <div class="card-title"><span>🍩 أكثر الأقسام نشاطًا</span></div>
               <div id="dashboard-departments-donut"></div>
             </div>
           </div>
 
           <div class="card" style="margin-top:20px;">
-            <div class="card-title"><span>أكثر البرامج تنفيذًا (حسب عدد المتدربين)</span></div>
+            <div class="card-title"><span>📊 أكثر البرامج تنفيذًا (حسب عدد المتدربين)</span></div>
             <div id="dashboard-top-programs-bar"></div>
           </div>
 
           <div class="card" style="margin-top:20px;">
-            <div class="card-title"><span>مقارنة سنوية — إجمالي المتدربين والساعات عبر السنوات</span></div>
+            <div class="card-title"><span>📊 مقارنة سنوية — إجمالي المتدربين والساعات عبر السنوات</span></div>
             <div id="dashboard-yearly-bar"></div>
           </div>
 
@@ -493,7 +559,7 @@
         <form id="generic-form" onsubmit="return false;">
           <div class="form-section">
             <div class="form-section-title">
-              <span class="section-num" id="generic-form-icon"></span>
+              <span class="section-num" id="generic-form-icon">📄</span>
               <span id="generic-form-title">تقرير</span>
             </div>
             <div class="form-grid" id="generic-form-fields"></div>
@@ -510,7 +576,7 @@
       <div id="view-new-report" class="view hidden">
         <form id="report-form" onsubmit="return false;">
 
-          <div class="ai-hint">المساعد الذكي داخل هذا النموذج يحلل البيانات التي أدخلتها (البرامج، الإحصاءات، المؤشرات) ويقترح صياغات إدارية جاهزة يمكنك مراجعتها وتعديلها بحرية قبل الحفظ. أدخل بيانات البرامج والإحصاءات أولًا للحصول على أفضل النتائج.</div>
+          <div class="ai-hint">✨ المساعد الذكي داخل هذا النموذج يحلل البيانات التي أدخلتها (البرامج، الإحصاءات، المؤشرات) ويقترح صياغات إدارية جاهزة يمكنك مراجعتها وتعديلها بحرية قبل الحفظ. أدخل بيانات البرامج والإحصاءات أولًا للحصول على أفضل النتائج.</div>
 
           <div class="form-section">
             <div class="form-section-title"><span class="section-num">1</span><span>بيانات عامة</span></div>
@@ -533,9 +599,9 @@
               <textarea id="f-summary" placeholder="نظرة عامة موجزة على أبرز أنشطة الشهر ونتائجها..."></textarea>
             </div>
             <div class="btn-row">
-              <button type="button" class="btn btn-ai btn-sm" onclick="aiGenerateSummary()">توليد الملخص التنفيذي</button>
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishText('f-summary','summary')">تحسين اللغة الرسمية</button>
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadText('f-summary','summary')">تدقيق إملائي</button>
+              <button type="button" class="btn btn-ai btn-sm" onclick="aiGenerateSummary()">✨ توليد الملخص التنفيذي</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishText('f-summary','summary')">🪄 تحسين اللغة الرسمية</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadText('f-summary','summary')">🔍 تدقيق إملائي</button>
             </div>
           </div>
 
@@ -650,9 +716,9 @@
             <div class="repeat-list" id="list-achievements"></div>
             <div class="btn-row" style="margin-top:10px;">
               <button type="button" class="btn btn-ghost btn-sm" onclick="addItem('achievements')">+ إضافة إنجاز</button>
-              <button type="button" class="btn btn-ai btn-sm" onclick="aiGenerateAchievements()">توليد الإنجازات</button>
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishRepeatList('achievements')">تحويل النقاط إلى صياغة رسمية</button>
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadRepeatList('achievements')">تدقيق إملائي</button>
+              <button type="button" class="btn btn-ai btn-sm" onclick="aiGenerateAchievements()">✨ توليد الإنجازات</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishRepeatList('achievements')">🪄 تحويل النقاط إلى صياغة رسمية</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadRepeatList('achievements')">🔍 تدقيق إملائي</button>
             </div>
           </div>
 
@@ -661,9 +727,9 @@
             <div class="repeat-list" id="list-challenges"></div>
             <div class="btn-row" style="margin-top:10px;">
               <button type="button" class="btn btn-ghost btn-sm" onclick="addItem('challenges')">+ إضافة تحدٍ</button>
-              <button type="button" class="btn btn-ai btn-sm" onclick="aiGenerateChallenges()">صياغة التحديات</button>
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishRepeatList('challenges')">تحويل النقاط إلى صياغة رسمية</button>
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadRepeatList('challenges')">تدقيق إملائي</button>
+              <button type="button" class="btn btn-ai btn-sm" onclick="aiGenerateChallenges()">✨ صياغة التحديات</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishRepeatList('challenges')">🪄 تحويل النقاط إلى صياغة رسمية</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadRepeatList('challenges')">🔍 تدقيق إملائي</button>
             </div>
           </div>
 
@@ -672,9 +738,9 @@
             <div class="repeat-list" id="list-recommendations"></div>
             <div class="btn-row" style="margin-top:10px;">
               <button type="button" class="btn btn-ghost btn-sm" onclick="addItem('recommendations')">+ إضافة توصية</button>
-              <button type="button" class="btn btn-ai btn-sm" onclick="aiGenerateRecommendations()">اقتراح التوصيات</button>
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishRepeatList('recommendations')">تحويل النقاط إلى صياغة رسمية</button>
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadRepeatList('recommendations')">تدقيق إملائي</button>
+              <button type="button" class="btn btn-ai btn-sm" onclick="aiGenerateRecommendations()">✨ اقتراح التوصيات</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishRepeatList('recommendations')">🪄 تحويل النقاط إلى صياغة رسمية</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadRepeatList('recommendations')">🔍 تدقيق إملائي</button>
             </div>
           </div>
 
@@ -683,9 +749,9 @@
             <div class="repeat-list" id="list-nextplan"></div>
             <div class="btn-row" style="margin-top:10px;">
               <button type="button" class="btn btn-ghost btn-sm" onclick="addItem('nextMonthPlan')">+ إضافة بند للخطة</button>
-              <button type="button" class="btn btn-ai btn-sm" onclick="aiGenerateNextMonthPlan()">صياغة خطة الشهر القادم</button>
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishRepeatList('nextMonthPlan')">تحويل النقاط إلى صياغة رسمية</button>
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadRepeatList('nextMonthPlan')">تدقيق إملائي</button>
+              <button type="button" class="btn btn-ai btn-sm" onclick="aiGenerateNextMonthPlan()">✨ صياغة خطة الشهر القادم</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishRepeatList('nextMonthPlan')">🪄 تحويل النقاط إلى صياغة رسمية</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadRepeatList('nextMonthPlan')">🔍 تدقيق إملائي</button>
             </div>
           </div>
 
@@ -695,8 +761,8 @@
               <textarea id="f-notes" placeholder="أي ملاحظات أو مرفقات يجب الإشارة إليها..."></textarea>
             </div>
             <div class="btn-row">
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishText('f-notes','notes')">تحسين اللغة الرسمية</button>
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadText('f-notes','notes')">تدقيق إملائي</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishText('f-notes','notes')">🪄 تحسين اللغة الرسمية</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadText('f-notes','notes')">🔍 تدقيق إملائي</button>
             </div>
           </div>
 
@@ -715,7 +781,7 @@
           <div class="btn-row">
             <button type="button" class="btn btn-primary" onclick="saveDraft(false)">حفظ التقرير</button>
             <button type="button" class="btn btn-gold" onclick="saveDraft(true)">حفظ وطباعة / تصدير PDF</button>
-            <button type="button" class="btn btn-ai" onclick="aiProofreadWholeReport()">تدقيق إملائي شامل للتقرير</button>
+            <button type="button" class="btn btn-ai" onclick="aiProofreadWholeReport()">🔍 تدقيق إملائي شامل للتقرير</button>
             <button type="button" class="btn btn-ghost" onclick="switchView('archive')">إلغاء</button>
           </div>
         </form>
@@ -1015,8 +1081,23 @@
         </div>
 
         <div class="card" style="margin-top:20px;">
+          <div class="card-title"><span>قاعدة البيانات</span></div>
+          <p class="hint" style="margin-bottom:14px;">
+            يمكنك ربط النظام بملف قاعدة بيانات مستقل (JSON) يُحفظ على جهازك خارج تخزين المتصفح، ليتعامل النظام مع كميات بيانات كبيرة
+            دون التأثير على السرعة — تتم القراءة دائمًا من نسخة في الذاكرة (فورية)، ويُكتب الملف في الخلفية بعد كل تعديل تلقائيًا.
+            هذه الميزة مدعومة حاليًا في متصفحي <b>Chrome</b> و<b>Edge</b> فقط؛ وفي المتصفحات الأخرى يستمر النظام بالعمل على تخزين المتصفح المحلي تلقائيًا.
+          </p>
+          <div id="db-status-box" class="ai-hint" style="margin-bottom:16px;"></div>
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" onclick="createDatabaseFile()">إنشاء ملف قاعدة بيانات جديد</button>
+            <button type="button" class="btn btn-gold" onclick="openDatabaseFile()">فتح ملف قاعدة بيانات موجود</button>
+            <button type="button" class="btn btn-ghost" onclick="disconnectDatabaseFile()">فصل والعودة لتخزين المتصفح</button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:20px;">
           <div class="card-title"><span>النسخ الاحتياطي والاستيراد</span></div>
-          <p class="hint" style="margin-bottom:14px;">جميع البيانات محفوظة محليًا داخل هذا المتصفح فقط. يُنصح بتصدير نسخة احتياطية دوريًا للحفاظ على بياناتك أو نقلها إلى جهاز آخر.</p>
+          <p class="hint" style="margin-bottom:14px;">نسخة احتياطية إضافية يمكن تصديرها يدويًا في أي وقت (سواء كنت تستخدم ملف قاعدة البيانات أو تخزين المتصفح)، لحفظ بياناتك أو نقلها إلى جهاز آخر.</p>
           <div class="btn-row">
             <button type="button" class="btn btn-primary" onclick="exportBackup()">تصدير نسخة احتياطية (JSON)</button>
             <button type="button" class="btn btn-gold" onclick="exportBackupExcel()">تصدير نسخة احتياطية (Excel)</button>
@@ -1024,6 +1105,23 @@
               استيراد نسخة احتياطية
               <input type="file" accept="application/json" id="import-file" style="display:none;" onchange="importBackup(this.files[0])">
             </label>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:20px;">
+          <div class="card-title"><span>الأمان — كلمة مرور الدخول</span></div>
+          <p class="hint" style="margin-bottom:14px;">
+            كلمة المرور محفوظة بصيغة مشفّرة (SHA-256) وليست نصًا صريحًا. ملاحظة مهمة: بما أن هذا ملف يعمل بالكامل داخل المتصفح دون خادم،
+            فإن هذا يمثل بوابة دخول أساسية وليس حماية مطلقة — أي شخص لديه معرفة تقنية ويصل لملف النظام نفسه يمكنه نظريًا تعديل الكود لتجاوزها.
+          </p>
+          <div class="form-grid">
+            <div class="field"><label>كلمة المرور الحالية</label><input type="password" id="sec-current-password" autocomplete="off"></div>
+            <div class="field"><label>كلمة المرور الجديدة</label><input type="password" id="sec-new-password" autocomplete="off"></div>
+            <div class="field"><label>تأكيد كلمة المرور الجديدة</label><input type="password" id="sec-confirm-password" autocomplete="off"></div>
+          </div>
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" onclick="changePassword()">تغيير كلمة المرور</button>
+            <button type="button" class="btn btn-ghost" onclick="logoutApp()">تسجيل الخروج الآن</button>
           </div>
         </div>
 
@@ -1046,7 +1144,7 @@
 /* =====================================================================
    قاعدة البيانات المحلية (Local Database) — مبنية على localStorage
    ===================================================================== */
-const DB_KEYS = { reports:'ctr_reports_v1', programs:'ctr_programs_v1', settings:'ctr_settings_v1', annual:'ctr_annual_reports_v1', generic:'ctr_generic_reports_v1', dashboardYears:'ctr_dashboard_years_v1', printLayout:'ctr_print_layout_v1' };
+const DB_KEYS = { reports:'ctr_reports_v1', programs:'ctr_programs_v1', settings:'ctr_settings_v1', annual:'ctr_annual_reports_v1', generic:'ctr_generic_reports_v1', dashboardYears:'ctr_dashboard_years_v1', printLayout:'ctr_print_layout_v1', authHash:'ctr_auth_hash_v1' };
 
 /* شعار المؤسسة الافتراضي (TechBox) — يُستخدم تلقائيًا إن لم يقم المستخدم برفع شعار آخر عبر الإعدادات.
    ملاحظة: هذا مسار نسبي لملف صورة، لذا يجب أن يكون ملف TechBox.jpeg موجودًا في نفس مجلد ملف الـ HTML
@@ -1064,18 +1162,36 @@ function saveJSON(key, value){
   catch(e){ toast('تعذّر حفظ البيانات محليًا في هذا المتصفح', 'error'); }
 }
 
-function getReports(){ return loadJSON(DB_KEYS.reports, []); }
-function setReports(arr){ saveJSON(DB_KEYS.reports, arr); }
-function getPrograms(){ return loadJSON(DB_KEYS.programs, []); }
-function setPrograms(arr){ saveJSON(DB_KEYS.programs, arr); }
-function getSettings(){ return loadJSON(DB_KEYS.settings, defaultSettings()); }
-function setSettings(obj){ saveJSON(DB_KEYS.settings, obj); }
-function getAnnualReports(){ return loadJSON(DB_KEYS.annual, []); }
-function setAnnualReports(arr){ saveJSON(DB_KEYS.annual, arr); }
-function getGenericReports(){ return loadJSON(DB_KEYS.generic, []); }
-function setGenericReports(arr){ saveJSON(DB_KEYS.generic, arr); }
-function getCustomDashboardYears(){ return loadJSON(DB_KEYS.dashboardYears, []); }
-function setCustomDashboardYears(arr){ saveJSON(DB_KEYS.dashboardYears, arr); }
+/* =====================================================================
+   قاعدة البيانات — ملف JSON مستقل خارج تخزين المتصفح (File System Access API)
+   جميع القراءات تتم من نسخة محفوظة في ذاكرة المتصفح طوال الجلسة (سريعة
+   وثابتة السرعة مهما كبر حجم البيانات)، والحفظ يتم إلى الملف الخارجي
+   بشكل مُجمّع (debounced) في الخلفية بعد كل تعديل، بدل كتابة متزامنة
+   تُبطئ الواجهة كما في localStorage التقليدي. إن لم يدعم المتصفح هذه
+   الميزة (مثل Firefox/Safari) أو لم يُربط ملف بعد، يُستخدم تخزين
+   المتصفح المحلي تلقائيًا كبديل متوافق مع الجميع.
+   ===================================================================== */
+let DB = { reports:[], programs:[], settings:null, annual:[], generic:[], dashboardYears:[], printLayout:null };
+let dbFileHandle = null;
+let dbSaveTimer = null;
+let dbIsDirty = false;
+let isFreshDatabase = false;
+let dbNeedsReconnect = false;
+let dbRememberedHandleForReconnect = null;
+const DB_FILE_SUGGESTED_NAME = 'techbox-reports-database.json';
+
+function getReports(){ return DB.reports; }
+function setReports(arr){ DB.reports = arr; scheduleDbSave(); }
+function getPrograms(){ return DB.programs; }
+function setPrograms(arr){ DB.programs = arr; scheduleDbSave(); }
+function getSettings(){ return DB.settings || defaultSettings(); }
+function setSettings(obj){ DB.settings = obj; scheduleDbSave(); }
+function getAnnualReports(){ return DB.annual; }
+function setAnnualReports(arr){ DB.annual = arr; scheduleDbSave(); }
+function getGenericReports(){ return DB.generic; }
+function setGenericReports(arr){ DB.generic = arr; scheduleDbSave(); }
+function getCustomDashboardYears(){ return DB.dashboardYears; }
+function setCustomDashboardYears(arr){ DB.dashboardYears = arr; scheduleDbSave(); }
 function addCustomDashboardYear(y){
   const arr = getCustomDashboardYears();
   if(!arr.includes(y)){ arr.push(y); setCustomDashboardYears(arr); }
@@ -1102,14 +1218,14 @@ function defaultPrintLayout(){
   return PRINT_SECTIONS.map(s=>({ key:s.key, visible:true }));
 }
 function getPrintLayout(){
-  const saved = loadJSON(DB_KEYS.printLayout, null);
+  const saved = DB.printLayout;
   if(!saved || !Array.isArray(saved) || saved.length===0) return defaultPrintLayout();
   const savedKeys = saved.map(i=>i.key);
   const merged = saved.slice();
   PRINT_SECTIONS.forEach(s=>{ if(!savedKeys.includes(s.key)) merged.push({ key:s.key, visible:true }); });
   return merged;
 }
-function setPrintLayout(arr){ saveJSON(DB_KEYS.printLayout, arr); }
+function setPrintLayout(arr){ DB.printLayout = arr; scheduleDbSave(); }
 
 function defaultSettings(){
   return {
@@ -1118,20 +1234,247 @@ function defaultSettings(){
   };
 }
 
+/* يُطبّع أي ملف قاعدة بيانات مفتوح من القرص: يضمن وجود كل الحقول المطلوبة
+   بالشكل الصحيح حتى لو كان الملف قديمًا أو ناقصًا. */
+function normalizeDbShape(parsed){
+  parsed = parsed || {};
+  return {
+    reports: Array.isArray(parsed.reports) ? parsed.reports : [],
+    programs: Array.isArray(parsed.programs) ? parsed.programs : [],
+    settings: parsed.settings || defaultSettings(),
+    annual: Array.isArray(parsed.annual) ? parsed.annual : [],
+    generic: Array.isArray(parsed.generic) ? parsed.generic : [],
+    dashboardYears: Array.isArray(parsed.dashboardYears) ? parsed.dashboardYears : [],
+    printLayout: Array.isArray(parsed.printLayout) ? parsed.printLayout : defaultPrintLayout()
+  };
+}
+
+/* يحمّل قاعدة البيانات إما من ملف مستقل مربوط مسبقًا، أو من تخزين المتصفح
+   المحلي كخيار بديل. ملاحظة تقنية مهمة: صلاحية الوصول لملف خارجي
+   (requestPermission) لا يمنحها المتصفح تلقائيًا إلا استجابةً لتفاعل
+   مباشر من المستخدم (ضغطة زر)، لذا يُكتفى هنا بفحص غير تفاعلي
+   (queryPermission) أثناء التحميل التلقائي؛ وإن لم تكن الصلاحية ممنوحة
+   بعد، يعمل النظام مؤقتًا على تخزين المتصفح ويعرض زر "إعادة الاتصال"
+   الذي يطلب الصلاحية بشكل صريح عند ضغطه. */
+async function loadDatabase(){
+  const handle = await getRememberedFileHandle();
+  if(handle){
+    try{
+      const granted = (await handle.queryPermission({ mode:'readwrite' })) === 'granted';
+      if(granted){
+        const file = await handle.getFile();
+        const text = await file.text();
+        DB = normalizeDbShape(JSON.parse(text));
+        dbFileHandle = handle;
+        return;
+      }else{
+        dbNeedsReconnect = true;
+        dbRememberedHandleForReconnect = handle;
+      }
+    }catch(e){
+      dbNeedsReconnect = true;
+      dbRememberedHandleForReconnect = handle;
+    }
+  }
+  isFreshDatabase = localStorage.getItem(DB_KEYS.programs) === null;
+  DB.reports = loadJSON(DB_KEYS.reports, []);
+  DB.programs = loadJSON(DB_KEYS.programs, []);
+  DB.settings = loadJSON(DB_KEYS.settings, defaultSettings());
+  DB.annual = loadJSON(DB_KEYS.annual, []);
+  DB.generic = loadJSON(DB_KEYS.generic, []);
+  DB.dashboardYears = loadJSON(DB_KEYS.dashboardYears, []);
+  DB.printLayout = loadJSON(DB_KEYS.printLayout, null) || defaultPrintLayout();
+}
+
+/* يُستدعى بضغطة زر من المستخدم (الإعدادات) لإعادة طلب صلاحية الوصول
+   لملف قاعدة بيانات كان مربوطًا سابقًا — تعمل لأن الضغطة نفسها تُعتبر
+   تفاعلًا مباشرًا يسمح للمتصفح بإظهار نافذة الصلاحية. */
+async function reconnectDatabaseFile(){
+  if(!dbRememberedHandleForReconnect){ toast('لا يوجد ملف سابق لإعادة الاتصال به', 'error'); return; }
+  try{
+    const granted = (await dbRememberedHandleForReconnect.requestPermission({ mode:'readwrite' })) === 'granted';
+    if(!granted){ toast('تم رفض صلاحية الوصول للملف', 'error'); return; }
+    const file = await dbRememberedHandleForReconnect.getFile();
+    const text = await file.text();
+    const parsed = JSON.parse(text);
+    if(!confirm('سيتم استبدال البيانات المعروضة حاليًا ببيانات الملف المربوط. هل تريد المتابعة؟')) return;
+    DB = normalizeDbShape(parsed);
+    dbFileHandle = dbRememberedHandleForReconnect;
+    dbNeedsReconnect = false;
+    renderDatabaseSettingsCard();
+    switchView(currentView);
+    toast('تم إعادة الاتصال بملف قاعدة البيانات بنجاح');
+  }catch(e){ toast('تعذّر إعادة الاتصال بالملف', 'error'); }
+}
+
+/* ---------- الحفظ المُجمّع (debounced) ---------- */
+function scheduleDbSave(){
+  dbIsDirty = true;
+  updateDbStatusIndicator('saving');
+  clearTimeout(dbSaveTimer);
+  dbSaveTimer = setTimeout(flushDbSave, 700);
+}
+async function flushDbSaveNow(){
+  dbIsDirty = true;
+  clearTimeout(dbSaveTimer);
+  await flushDbSave();
+}
+async function flushDbSave(){
+  if(!dbIsDirty) return;
+  dbIsDirty = false;
+  if(dbFileHandle){
+    try{
+      const writable = await dbFileHandle.createWritable();
+      await writable.write(JSON.stringify(DB));
+      await writable.close();
+      updateDbStatusIndicator('saved-file');
+      return;
+    }catch(e){
+      updateDbStatusIndicator('error');
+      toast('تعذّر الحفظ في ملف قاعدة البيانات — تم الحفظ احتياطيًا في تخزين المتصفح', 'error');
+    }
+  }
+  persistToLocalStorage();
+  updateDbStatusIndicator('saved-local');
+}
+function persistToLocalStorage(){
+  saveJSON(DB_KEYS.reports, DB.reports);
+  saveJSON(DB_KEYS.programs, DB.programs);
+  saveJSON(DB_KEYS.settings, DB.settings);
+  saveJSON(DB_KEYS.annual, DB.annual);
+  saveJSON(DB_KEYS.generic, DB.generic);
+  saveJSON(DB_KEYS.dashboardYears, DB.dashboardYears);
+  saveJSON(DB_KEYS.printLayout, DB.printLayout);
+}
+
+/* ---------- تذكّر ملف القاعدة المربوط بين الجلسات (IndexedDB، للمقبض فقط وليس للبيانات) ---------- */
+function openHandleDB(){
+  return new Promise((resolve, reject)=>{
+    const req = indexedDB.open('ctr_filehandle_store', 1);
+    req.onupgradeneeded = ()=>{ req.result.createObjectStore('handles'); };
+    req.onsuccess = ()=>resolve(req.result);
+    req.onerror = ()=>reject(req.error);
+  });
+}
+async function rememberFileHandle(handle){
+  try{
+    const db = await openHandleDB();
+    await new Promise((resolve,reject)=>{
+      const tx = db.transaction('handles','readwrite');
+      tx.objectStore('handles').put(handle, 'dbFile');
+      tx.oncomplete = resolve; tx.onerror = ()=>reject(tx.error);
+    });
+  }catch(e){ /* تجاهل: الربط بالملف سيبقى فعّالًا لهذه الجلسة فقط */ }
+}
+async function getRememberedFileHandle(){
+  try{
+    const db = await openHandleDB();
+    return await new Promise((resolve)=>{
+      const tx = db.transaction('handles','readonly');
+      const req = tx.objectStore('handles').get('dbFile');
+      req.onsuccess = ()=>resolve(req.result || null);
+      req.onerror = ()=>resolve(null);
+    });
+  }catch(e){ return null; }
+}
+async function forgetRememberedFileHandle(){
+  try{
+    const db = await openHandleDB();
+    const tx = db.transaction('handles','readwrite');
+    tx.objectStore('handles').delete('dbFile');
+  }catch(e){ /* تجاهل */ }
+}
+function fileSystemAccessSupported(){
+  return typeof window.showSaveFilePicker === 'function' && typeof window.showOpenFilePicker === 'function';
+}
+
+/* ---------- إنشاء / فتح / فصل ملف قاعدة البيانات (من الإعدادات) ---------- */
+async function createDatabaseFile(){
+  if(!fileSystemAccessSupported()){
+    toast('هذا المتصفح لا يدعم ربط ملف قاعدة بيانات مستقل. يُرجى استخدام Chrome أو Edge لهذه الميزة', 'error');
+    return;
+  }
+  try{
+    const handle = await window.showSaveFilePicker({
+      suggestedName: DB_FILE_SUGGESTED_NAME,
+      types: [{ description:'ملف قاعدة بيانات JSON', accept:{'application/json':['.json']} }]
+    });
+    dbFileHandle = handle;
+    dbNeedsReconnect = false;
+    await rememberFileHandle(handle);
+    await flushDbSaveNow();
+    renderDatabaseSettingsCard();
+    toast('تم إنشاء ملف قاعدة البيانات وربطه بنجاح');
+  }catch(e){ if(e.name !== 'AbortError') toast('تعذّر إنشاء ملف قاعدة البيانات', 'error'); }
+}
+async function openDatabaseFile(){
+  if(!fileSystemAccessSupported()){
+    toast('هذا المتصفح لا يدعم ربط ملف قاعدة بيانات مستقل. يُرجى استخدام Chrome أو Edge لهذه الميزة', 'error');
+    return;
+  }
+  try{
+    const [handle] = await window.showOpenFilePicker({
+      types: [{ description:'ملف قاعدة بيانات JSON', accept:{'application/json':['.json']} }]
+    });
+    const file = await handle.getFile();
+    const text = await file.text();
+    let parsed;
+    try{ parsed = JSON.parse(text); }
+    catch(e){ toast('صيغة الملف غير صحيحة — تأكد أنه ملف قاعدة بيانات JSON صالح', 'error'); return; }
+    if(!confirm('سيتم استبدال البيانات المعروضة حاليًا ببيانات هذا الملف. هل تريد المتابعة؟')) return;
+    DB = normalizeDbShape(parsed);
+    dbFileHandle = handle;
+    dbNeedsReconnect = false;
+    await rememberFileHandle(handle);
+    renderDatabaseSettingsCard();
+    switchView(currentView);
+    toast('تم تحميل قاعدة البيانات من الملف بنجاح');
+  }catch(e){ if(e.name !== 'AbortError') toast('تعذّر فتح الملف', 'error'); }
+}
+async function disconnectDatabaseFile(){
+  if(!confirm('سيتم الفصل عن ملف قاعدة البيانات والعودة لاستخدام تخزين المتصفح المحلي (بياناتك الحالية ستُحفظ في المتصفح أولًا). هل تريد المتابعة؟')) return;
+  persistToLocalStorage();
+  dbFileHandle = null;
+  dbNeedsReconnect = false;
+  dbRememberedHandleForReconnect = null;
+  await forgetRememberedFileHandle();
+  renderDatabaseSettingsCard();
+  toast('تم الفصل عن الملف — يعمل النظام الآن على تخزين المتصفح المحلي');
+}
+function updateDbStatusIndicator(state){
+  const el = document.getElementById('db-save-status');
+  if(!el) return;
+  const time = new Date().toLocaleTimeString('ar-EG');
+  if(state === 'saving') el.textContent = 'جارٍ الحفظ...';
+  else if(state === 'saved-file') el.textContent = '✓ تم الحفظ في ملف قاعدة البيانات — ' + time;
+  else if(state === 'saved-local') el.textContent = '✓ تم الحفظ في تخزين المتصفح المحلي — ' + time;
+  else if(state === 'error') el.textContent = '⚠️ حدث خطأ أثناء الحفظ';
+}
+function renderDatabaseSettingsCard(){
+  const box = document.getElementById('db-status-box');
+  if(!box) return;
+  if(dbFileHandle){
+    box.innerHTML = `✅ متصل بملف قاعدة بيانات مستقل: <b>${escapeHtml(dbFileHandle.name || 'ملف محدد')}</b><br><span id="db-save-status" class="hint"></span>`;
+  }else if(dbNeedsReconnect){
+    box.innerHTML = `⚠️ كان النظام متصلًا بملف قاعدة بيانات سابقًا، لكن المتصفح يطلب إعادة تأكيد الصلاحية (إجراء أمني طبيعي). يعمل النظام الآن مؤقتًا على تخزين المتصفح.<br>
+      <button type="button" class="btn btn-gold btn-sm" style="margin-top:8px;" onclick="reconnectDatabaseFile()">إعادة الاتصال بملف قاعدة البيانات</button>
+      <div id="db-save-status" class="hint" style="margin-top:6px;"></div>`;
+  }else if(!fileSystemAccessSupported()){
+    box.innerHTML = `💾 يعمل النظام حاليًا على تخزين المتصفح المحلي (هذا المتصفح لا يدعم ربط ملف قاعدة بيانات مستقل).<br><span id="db-save-status" class="hint"></span>`;
+  }else{
+    box.innerHTML = `💾 يعمل النظام حاليًا على تخزين المتصفح المحلي. لم يتم ربط ملف قاعدة بيانات مستقل بعد.<br><span id="db-save-status" class="hint"></span>`;
+  }
+}
+
 function seedIfFirstRun(){
-  if(localStorage.getItem(DB_KEYS.programs) === null){
-    setPrograms([
+  if(isFreshDatabase){
+    DB.programs = [
       { id: uid(), name:'دورة مهارات التواصل الفعّال', category:'دورة تدريبية', targetGroup:'الموظفون الجدد', defaultDuration:12, provider:'مدرب داخلي' },
       { id: uid(), name:'ورشة إدارة الوقت وتحديد الأولويات', category:'ورشة عمل', targetGroup:'جميع المستويات الإدارية', defaultDuration:6, provider:'مدرب خارجي' },
       { id: uid(), name:'برنامج تأهيل القيادات الإشرافية', category:'برنامج تأهيلي', targetGroup:'المشرفون ورؤساء الأقسام', defaultDuration:30, provider:'جهة تدريب متخصصة' }
-    ]);
+    ];
+    scheduleDbSave();
   }
-  if(localStorage.getItem(DB_KEYS.reports) === null){ setReports([]); }
-  if(localStorage.getItem(DB_KEYS.settings) === null){ setSettings(defaultSettings()); }
-  if(localStorage.getItem(DB_KEYS.annual) === null){ setAnnualReports([]); }
-  if(localStorage.getItem(DB_KEYS.generic) === null){ setGenericReports([]); }
-  if(localStorage.getItem(DB_KEYS.dashboardYears) === null){ setCustomDashboardYears([]); }
-  if(localStorage.getItem(DB_KEYS.printLayout) === null){ setPrintLayout(defaultPrintLayout()); }
 }
 
 function uid(){ return 'id-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,8); }
@@ -3161,11 +3504,11 @@ function runComparison(){
    titleKeys تُستخدم لعرض عنوان مميز لكل تقرير محفوظ في جدول الأرشيف. */
 const REPORT_TEMPLATES = {
   monthly:{
-    label:'التقرير الشهري', icon:'', kind:'builtin-monthly',
+    label:'التقرير الشهري', icon:'📅', kind:'builtin-monthly',
     desc:'تقرير شامل لأنشطة البرامج والدورات خلال شهر كامل، مع مؤشرات الأداء والأهداف.'
   },
   weekly:{
-    label:'التقرير الأسبوعي', icon:'', kind:'generic',
+    label:'التقرير الأسبوعي', icon:'🗓️', kind:'generic',
     desc:'ملخص أسبوعي للأنشطة والمهام والمعوقات وخطة الأسبوع القادم.',
     titleKeys:['periodFrom','periodTo'],
     fields:[
@@ -3182,7 +3525,7 @@ const REPORT_TEMPLATES = {
     ]
   },
   daily:{
-    label:'التقرير اليومي', icon:'', kind:'generic',
+    label:'التقرير اليومي', icon:'☀️', kind:'generic',
     desc:'تقرير سريع للمهام المنجزة والمؤجلة خلال يوم عمل واحد.',
     titleKeys:['date'],
     fields:[
@@ -3196,7 +3539,7 @@ const REPORT_TEMPLATES = {
     ]
   },
   activity:{
-    label:'تقرير نشاط', icon:'', kind:'generic',
+    label:'تقرير نشاط', icon:'📌', kind:'generic',
     desc:'توثيق نشاط أو لقاء محدد: الهدف، الوصف، النتائج والتوصيات.',
     titleKeys:['activityName'],
     fields:[
@@ -3213,7 +3556,7 @@ const REPORT_TEMPLATES = {
     ]
   },
   course:{
-    label:'تقرير دورة تدريبية', icon:'', kind:'generic',
+    label:'تقرير دورة تدريبية', icon:'🎓', kind:'generic',
     desc:'تقرير مفصّل عن دورة تدريبية واحدة: المحتوى، التقييم والنتائج.',
     titleKeys:['courseName'],
     fields:[
@@ -3231,7 +3574,7 @@ const REPORT_TEMPLATES = {
     ]
   },
   event:{
-    label:'تقرير فعالية', icon:'', kind:'generic',
+    label:'تقرير فعالية', icon:'🎤', kind:'generic',
     desc:'توثيق فعالية أو مؤتمر: الأجندة، الحضور، أبرز اللحظات والتقييم.',
     titleKeys:['eventName'],
     fields:[
@@ -3249,7 +3592,7 @@ const REPORT_TEMPLATES = {
     ]
   },
   project:{
-    label:'تقرير إنجاز مشروع', icon:'', kind:'generic',
+    label:'تقرير إنجاز مشروع', icon:'🚀', kind:'generic',
     desc:'حالة إنجاز مشروع: الأهداف المحققة، التحديات والدروس المستفادة.',
     titleKeys:['projectName'],
     fields:[
@@ -3267,7 +3610,7 @@ const REPORT_TEMPLATES = {
     ]
   },
   incident:{
-    label:'تقرير حادث / مشكلة', icon:'', kind:'generic',
+    label:'تقرير حادث / مشكلة', icon:'⚠️', kind:'generic',
     desc:'توثيق حادثة أو مشكلة: الوصف، الإجراءات الفورية وتوصيات منع التكرار.',
     titleKeys:['date','incidentType'],
     fields:[
@@ -3285,7 +3628,7 @@ const REPORT_TEMPLATES = {
     ]
   },
   annual:{
-    label:'التقرير السنوي', icon:'', kind:'builtin-annual',
+    label:'التقرير السنوي', icon:'📊', kind:'builtin-annual',
     desc:'تقرير سنوي مجمّع تلقائيًا من كل التقارير الشهرية المحفوظة.'
   }
 };
@@ -3642,6 +3985,7 @@ function renderSettingsView(){
   renderSettingsSignatures();
   renderLogoPreview(s.logoDataUrl);
   renderSettingsCustomYears();
+  renderDatabaseSettingsCard();
 }
 function renderSettingsCustomYears(){
   const container = document.getElementById('settings-custom-years-list');
@@ -3963,14 +4307,18 @@ function importBackup(file){
   };
   reader.readAsText(file);
 }
-function wipeAllData(){
-  if(!confirm('سيتم حذف جميع التقارير والبرامج والإعدادات نهائيًا من هذا المتصفح. هل أنت متأكد؟')) return;
+async function wipeAllData(){
+  if(!confirm('سيتم حذف جميع التقارير والبرامج والإعدادات نهائيًا (من المتصفح أو من ملف قاعدة البيانات المربوط). هل أنت متأكد؟')) return;
   if(!confirm('تأكيد أخير: هذا الإجراء لا يمكن التراجع عنه. هل تريد المتابعة؟')) return;
+  DB = { reports:[], programs:[], settings:defaultSettings(), annual:[], generic:[], dashboardYears:[], printLayout:defaultPrintLayout() };
+  await flushDbSaveNow();
   localStorage.removeItem(DB_KEYS.reports);
   localStorage.removeItem(DB_KEYS.programs);
   localStorage.removeItem(DB_KEYS.settings);
   localStorage.removeItem(DB_KEYS.annual);
   localStorage.removeItem(DB_KEYS.generic);
+  localStorage.removeItem(DB_KEYS.dashboardYears);
+  localStorage.removeItem(DB_KEYS.printLayout);
   toast('تم حذف جميع البيانات');
   setTimeout(()=>location.reload(), 800);
 }
@@ -4208,11 +4556,131 @@ function buildPrintHTML(r, s){
 }
 
 /* =====================================================================
-   التشغيل الأولي (Init)
+   المصادقة — كلمة مرور الدخول (مشفّرة بـ SHA-256، غير محفوظة كنص صريح).
+   ملاحظة: هذا حاجز دخول أساسي مناسب لتطبيق يعمل محليًا في المتصفح دون
+   خادم؛ وهو ليس حماية مطلقة، إذ يمكن نظريًا لأي شخص يملك الملف وخبرة
+   تقنية كافية تعديل الكود لتجاوزه — لا يوجد نظام يعمل بالكامل من طرف
+   العميل (client-side) يمكن أن يمنع ذلك تمامًا.
    ===================================================================== */
-seedIfFirstRun();
-updateSidebarBrand();
-switchView('dashboard');
+const DEFAULT_PASSWORD_HASH = '097355948d8c360710f91b009c1b7451fc7429b83d6d06a7a1ecd93dc480e0d2';
+const AUTH_SESSION_KEY = 'ctr_authenticated_v1';
+const MAX_LOGIN_ATTEMPTS = 5;
+const LOCKOUT_MS = 30000;
+let loginFailedAttempts = 0;
+let loginLockoutUntil = 0;
+
+function seedAuthIfFirstRun(){
+  if(localStorage.getItem(DB_KEYS.authHash) === null){
+    localStorage.setItem(DB_KEYS.authHash, DEFAULT_PASSWORD_HASH);
+  }
+}
+
+async function sha256Hex(text){
+  const enc = new TextEncoder().encode(text);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(hashBuffer)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+function showLockError(msg){
+  const el = document.getElementById('lock-error');
+  el.textContent = msg;
+  el.classList.remove('hidden');
+}
+
+async function attemptLogin(){
+  const now = Date.now();
+  if(now < loginLockoutUntil){
+    showLockError(`تم إيقاف المحاولات مؤقتًا. حاول مرة أخرى بعد ${Math.ceil((loginLockoutUntil-now)/1000)} ثانية.`);
+    return;
+  }
+  const input = document.getElementById('lock-password').value;
+  if(!input) return;
+  const hash = await sha256Hex(input);
+  const storedHash = localStorage.getItem(DB_KEYS.authHash) || DEFAULT_PASSWORD_HASH;
+  if(hash === storedHash){
+    loginFailedAttempts = 0;
+    sessionStorage.setItem(AUTH_SESSION_KEY, '1');
+    unlockApp();
+  }else{
+    loginFailedAttempts++;
+    document.getElementById('lock-password').value = '';
+    if(loginFailedAttempts >= MAX_LOGIN_ATTEMPTS){
+      loginLockoutUntil = Date.now() + LOCKOUT_MS;
+      showLockError(`عدد محاولات خاطئة كبير. تم إيقاف الدخول مؤقتًا لمدة ${LOCKOUT_MS/1000} ثانية.`);
+      loginFailedAttempts = 0;
+    }else{
+      showLockError(`كلمة المرور غير صحيحة. (${MAX_LOGIN_ATTEMPTS - loginFailedAttempts} محاولات متبقية)`);
+    }
+  }
+}
+
+async function unlockApp(){
+  document.getElementById('lock-screen').classList.add('hidden');
+  document.getElementById('app-root').classList.remove('hidden');
+  await initializeApp();
+}
+
+function logoutApp(){
+  sessionStorage.removeItem(AUTH_SESSION_KEY);
+  location.reload();
+}
+
+async function changePassword(){
+  const current = document.getElementById('sec-current-password').value;
+  const newPass = document.getElementById('sec-new-password').value;
+  const confirmPass = document.getElementById('sec-confirm-password').value;
+  if(!current || !newPass || !confirmPass){ toast('يرجى تعبئة جميع الحقول', 'error'); return; }
+  const currentHash = await sha256Hex(current);
+  const storedHash = localStorage.getItem(DB_KEYS.authHash) || DEFAULT_PASSWORD_HASH;
+  if(currentHash !== storedHash){ toast('كلمة المرور الحالية غير صحيحة', 'error'); return; }
+  if(newPass.length < 6){ toast('يجب أن تتكون كلمة المرور الجديدة من 6 أحرف على الأقل', 'error'); return; }
+  if(newPass !== confirmPass){ toast('كلمتا المرور الجديدتان غير متطابقتين', 'error'); return; }
+  const newHash = await sha256Hex(newPass);
+  localStorage.setItem(DB_KEYS.authHash, newHash);
+  document.getElementById('sec-current-password').value = '';
+  document.getElementById('sec-new-password').value = '';
+  document.getElementById('sec-confirm-password').value = '';
+  toast('تم تغيير كلمة المرور بنجاح');
+}
+
+document.getElementById('lock-password').addEventListener('keydown', e=>{
+  if(e.key === 'Enter') attemptLogin();
+});
+
+/* يعرض شعار المؤسسة واسمها (من الإعدادات المحفوظة، أو TechBox افتراضيًا) على شاشة الدخول */
+function renderLockScreenBrand(){
+  const s = getSettings();
+  document.getElementById('lock-logo-img').src = s.logoDataUrl || DEFAULT_LOGO_DATA_URL;
+  document.getElementById('lock-org-name').textContent = s.orgName || 'TechBox';
+}
+
+const EYE_OPEN_PATH = '<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/>';
+const EYE_CLOSED_PATH = '<path d="M3 3l18 18"/><path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"/><path d="M9.9 4.24A9.74 9.74 0 0 1 12 4c7 0 11 7 11 7a13.2 13.2 0 0 1-3.17 3.88M6.6 6.6C3.9 8.3 2 11 2 11s4 7 11 7a9.74 9.74 0 0 0 4.1-.9"/>';
+function toggleLockPasswordVisibility(){
+  const input = document.getElementById('lock-password');
+  const icon = document.getElementById('lock-eye-icon');
+  const isHidden = input.type === 'password';
+  input.type = isHidden ? 'text' : 'password';
+  icon.innerHTML = isHidden ? EYE_CLOSED_PATH : EYE_OPEN_PATH;
+}
+
+/* =====================================================================
+   التشغيل الأولي (Init) — يعمل فقط بعد التحقق من كلمة المرور
+   ===================================================================== */
+function initializeApp(){
+  seedIfFirstRun();
+  updateSidebarBrand();
+  switchView('dashboard');
+}
+
+(async function bootstrapApp(){
+  await loadDatabase();
+  renderLockScreenBrand();
+  seedAuthIfFirstRun();
+  if(sessionStorage.getItem(AUTH_SESSION_KEY) === '1'){
+    await unlockApp();
+  }
+})();
 </script>
 </body>
 </html>
