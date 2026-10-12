@@ -1,0 +1,95 @@
+{
+  "reports": [],
+  "programs": [
+    {
+      "id": "id-1a12e99cf04-pkv2ou",
+      "name": "دورة مهارات التواصل الفعّال",
+      "category": "دورة تدريبية",
+      "targetGroup": "الموظفون الجدد",
+      "defaultDuration": 12,
+      "provider": "مدرب داخلي"
+    },
+    {
+      "id": "id-1a12e99cf04-ojk3lc",
+      "name": "ورشة إدارة الوقت وتحديد الأولويات",
+      "category": "ورشة عمل",
+      "targetGroup": "جميع المستويات الإدارية",
+      "defaultDuration": 6,
+      "provider": "مدرب خارجي"
+    },
+    {
+      "id": "id-1a12e99cf04-ult17l",
+      "name": "برنامج تأهيل القيادات الإشرافية",
+      "category": "برنامج تأهيلي",
+      "targetGroup": "المشرفون ورؤساء الأقسام",
+      "defaultDuration": 30,
+      "provider": "جهة تدريب متخصصة"
+    }
+  ],
+  "settings": {
+    "orgName": "TechBox",
+    "coordinatorName": "",
+    "department": "",
+    "signatureLine": "",
+    "logoDataUrl": "TechBox.jpeg",
+    "signatures": [
+      {
+        "title": "أعده",
+        "name": ""
+      },
+      {
+        "title": "اعتمده",
+        "name": ""
+      }
+    ]
+  },
+  "annual": [],
+  "generic": [],
+  "dashboardYears": [],
+  "printLayout": [
+    {
+      "key": "logo",
+      "visible": true
+    },
+    {
+      "key": "summary",
+      "visible": true
+    },
+    {
+      "key": "kpis",
+      "visible": true
+    },
+    {
+      "key": "programsTable",
+      "visible": true
+    },
+    {
+      "key": "achievements",
+      "visible": true
+    },
+    {
+      "key": "challenges",
+      "visible": true
+    },
+    {
+      "key": "recommendations",
+      "visible": true
+    },
+    {
+      "key": "budget",
+      "visible": true
+    },
+    {
+      "key": "charts",
+      "visible": true
+    },
+    {
+      "key": "attachments",
+      "visible": true
+    },
+    {
+      "key": "signatures",
+      "visible": true
+    }
+  ]
+}
