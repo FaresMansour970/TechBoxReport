@@ -406,7 +406,7 @@
     </div>
     <button type="button" class="btn btn-gold lock-submit-btn" onclick="attemptLogin()">دخول إلى النظام</button>
     <div id="lock-error" class="lock-error hidden"></div>
-    <div class="lock-footer-note">🔒 محمي بتشفير SHA-256</div>
+    <div class="lock-footer-note">تواصل مع مسؤول النظام لإسترداد كلمة المرور</div>
   </div>
 </div>
 
@@ -458,7 +458,7 @@
     <div class="sidebar-footer">
      المهندس فارس منصور<br>
      00970595438486<br>
-     <a href="#" onclick="logoutApp();return false;" style="color:#CDA94A;">🔒 تسجيل الخروج</a>
+     <a href="#" onclick="logoutApp();return false;" style="color:#CDA94A;">تسجيل الخروج</a>
     </div>
   </aside>
 
@@ -507,22 +507,22 @@
 
           <div class="dash-chart-row">
             <div class="card">
-              <div class="card-title"><span>🎯 نسبة تحقيق الخطة</span></div>
+              <div class="card-title"><span>نسبة تحقيق الخطة</span></div>
               <div id="dashboard-gauge"></div>
             </div>
             <div class="card">
-              <div class="card-title"><span>🍩 أكثر الأقسام نشاطًا</span></div>
+              <div class="card-title"><span>أكثر الأقسام نشاطًا</span></div>
               <div id="dashboard-departments-donut"></div>
             </div>
           </div>
 
           <div class="card" style="margin-top:20px;">
-            <div class="card-title"><span>📊 أكثر البرامج تنفيذًا (حسب عدد المتدربين)</span></div>
+            <div class="card-title"><span>أكثر البرامج تنفيذًا (حسب عدد المتدربين)</span></div>
             <div id="dashboard-top-programs-bar"></div>
           </div>
 
           <div class="card" style="margin-top:20px;">
-            <div class="card-title"><span>📊 مقارنة سنوية — إجمالي المتدربين والساعات عبر السنوات</span></div>
+            <div class="card-title"><span>مقارنة سنوية — إجمالي المتدربين والساعات عبر السنوات</span></div>
             <div id="dashboard-yearly-bar"></div>
           </div>
 
@@ -559,7 +559,7 @@
         <form id="generic-form" onsubmit="return false;">
           <div class="form-section">
             <div class="form-section-title">
-              <span class="section-num" id="generic-form-icon">📄</span>
+              <span class="section-num" id="generic-form-icon"></span>
               <span id="generic-form-title">تقرير</span>
             </div>
             <div class="form-grid" id="generic-form-fields"></div>
@@ -576,7 +576,7 @@
       <div id="view-new-report" class="view hidden">
         <form id="report-form" onsubmit="return false;">
 
-          <div class="ai-hint">✨ المساعد الذكي داخل هذا النموذج يحلل البيانات التي أدخلتها (البرامج، الإحصاءات، المؤشرات) ويقترح صياغات إدارية جاهزة يمكنك مراجعتها وتعديلها بحرية قبل الحفظ. أدخل بيانات البرامج والإحصاءات أولًا للحصول على أفضل النتائج.</div>
+          <div class="ai-hint">المساعد الذكي داخل هذا النموذج يحلل البيانات التي أدخلتها (البرامج، الإحصاءات، المؤشرات) ويقترح صياغات إدارية جاهزة يمكنك مراجعتها وتعديلها بحرية قبل الحفظ. أدخل بيانات البرامج والإحصاءات أولًا للحصول على أفضل النتائج.</div>
 
           <div class="form-section">
             <div class="form-section-title"><span class="section-num">1</span><span>بيانات عامة</span></div>
@@ -599,9 +599,9 @@
               <textarea id="f-summary" placeholder="نظرة عامة موجزة على أبرز أنشطة الشهر ونتائجها..."></textarea>
             </div>
             <div class="btn-row">
-              <button type="button" class="btn btn-ai btn-sm" onclick="aiGenerateSummary()">✨ توليد الملخص التنفيذي</button>
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishText('f-summary','summary')">🪄 تحسين اللغة الرسمية</button>
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadText('f-summary','summary')">🔍 تدقيق إملائي</button>
+              <button type="button" class="btn btn-ai btn-sm" onclick="aiGenerateSummary()">توليد الملخص التنفيذي</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishText('f-summary','summary')">تحسين اللغة الرسمية</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadText('f-summary','summary')">تدقيق إملائي</button>
             </div>
           </div>
 
@@ -716,9 +716,9 @@
             <div class="repeat-list" id="list-achievements"></div>
             <div class="btn-row" style="margin-top:10px;">
               <button type="button" class="btn btn-ghost btn-sm" onclick="addItem('achievements')">+ إضافة إنجاز</button>
-              <button type="button" class="btn btn-ai btn-sm" onclick="aiGenerateAchievements()">✨ توليد الإنجازات</button>
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishRepeatList('achievements')">🪄 تحويل النقاط إلى صياغة رسمية</button>
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadRepeatList('achievements')">🔍 تدقيق إملائي</button>
+              <button type="button" class="btn btn-ai btn-sm" onclick="aiGenerateAchievements()">توليد الإنجازات</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishRepeatList('achievements')">تحويل النقاط إلى صياغة رسمية</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadRepeatList('achievements')">تدقيق إملائي</button>
             </div>
           </div>
 
@@ -727,9 +727,9 @@
             <div class="repeat-list" id="list-challenges"></div>
             <div class="btn-row" style="margin-top:10px;">
               <button type="button" class="btn btn-ghost btn-sm" onclick="addItem('challenges')">+ إضافة تحدٍ</button>
-              <button type="button" class="btn btn-ai btn-sm" onclick="aiGenerateChallenges()">✨ صياغة التحديات</button>
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishRepeatList('challenges')">🪄 تحويل النقاط إلى صياغة رسمية</button>
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadRepeatList('challenges')">🔍 تدقيق إملائي</button>
+              <button type="button" class="btn btn-ai btn-sm" onclick="aiGenerateChallenges()">صياغة التحديات</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishRepeatList('challenges')">تحويل النقاط إلى صياغة رسمية</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadRepeatList('challenges')">تدقيق إملائي</button>
             </div>
           </div>
 
@@ -738,9 +738,9 @@
             <div class="repeat-list" id="list-recommendations"></div>
             <div class="btn-row" style="margin-top:10px;">
               <button type="button" class="btn btn-ghost btn-sm" onclick="addItem('recommendations')">+ إضافة توصية</button>
-              <button type="button" class="btn btn-ai btn-sm" onclick="aiGenerateRecommendations()">✨ اقتراح التوصيات</button>
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishRepeatList('recommendations')">🪄 تحويل النقاط إلى صياغة رسمية</button>
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadRepeatList('recommendations')">🔍 تدقيق إملائي</button>
+              <button type="button" class="btn btn-ai btn-sm" onclick="aiGenerateRecommendations()">اقتراح التوصيات</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishRepeatList('recommendations')">تحويل النقاط إلى صياغة رسمية</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadRepeatList('recommendations')">تدقيق إملائي</button>
             </div>
           </div>
 
@@ -749,9 +749,9 @@
             <div class="repeat-list" id="list-nextplan"></div>
             <div class="btn-row" style="margin-top:10px;">
               <button type="button" class="btn btn-ghost btn-sm" onclick="addItem('nextMonthPlan')">+ إضافة بند للخطة</button>
-              <button type="button" class="btn btn-ai btn-sm" onclick="aiGenerateNextMonthPlan()">✨ صياغة خطة الشهر القادم</button>
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishRepeatList('nextMonthPlan')">🪄 تحويل النقاط إلى صياغة رسمية</button>
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadRepeatList('nextMonthPlan')">🔍 تدقيق إملائي</button>
+              <button type="button" class="btn btn-ai btn-sm" onclick="aiGenerateNextMonthPlan()">صياغة خطة الشهر القادم</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishRepeatList('nextMonthPlan')">تحويل النقاط إلى صياغة رسمية</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadRepeatList('nextMonthPlan')">تدقيق إملائي</button>
             </div>
           </div>
 
@@ -761,8 +761,8 @@
               <textarea id="f-notes" placeholder="أي ملاحظات أو مرفقات يجب الإشارة إليها..."></textarea>
             </div>
             <div class="btn-row">
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishText('f-notes','notes')">🪄 تحسين اللغة الرسمية</button>
-              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadText('f-notes','notes')">🔍 تدقيق إملائي</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiPolishText('f-notes','notes')">تحسين اللغة الرسمية</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="aiProofreadText('f-notes','notes')">تدقيق إملائي</button>
             </div>
           </div>
 
@@ -781,7 +781,7 @@
           <div class="btn-row">
             <button type="button" class="btn btn-primary" onclick="saveDraft(false)">حفظ التقرير</button>
             <button type="button" class="btn btn-gold" onclick="saveDraft(true)">حفظ وطباعة / تصدير PDF</button>
-            <button type="button" class="btn btn-ai" onclick="aiProofreadWholeReport()">🔍 تدقيق إملائي شامل للتقرير</button>
+            <button type="button" class="btn btn-ai" onclick="aiProofreadWholeReport()">تدقيق إملائي شامل للتقرير</button>
             <button type="button" class="btn btn-ghost" onclick="switchView('archive')">إلغاء</button>
           </div>
         </form>
@@ -1081,53 +1081,8 @@
         </div>
 
         <div class="card" style="margin-top:20px;">
-          <div class="card-title"><span>قاعدة البيانات</span></div>
-          <p class="hint" style="margin-bottom:14px;">
-            يمكنك ربط النظام بملف قاعدة بيانات مستقل (JSON) يُحفظ على جهازك خارج تخزين المتصفح، ليتعامل النظام مع كميات بيانات كبيرة
-            دون التأثير على السرعة — تتم القراءة دائمًا من نسخة في الذاكرة (فورية)، ويُكتب الملف في الخلفية بعد كل تعديل تلقائيًا.
-            هذه الميزة مدعومة حاليًا في متصفحي <b>Chrome</b> و<b>Edge</b> فقط؛ وفي المتصفحات الأخرى يستمر النظام بالعمل على تخزين المتصفح المحلي تلقائيًا.
-          </p>
-          <div id="db-status-box" class="ai-hint" style="margin-bottom:16px;"></div>
-          <div class="btn-row">
-            <button type="button" class="btn btn-primary" onclick="createDatabaseFile()">إنشاء ملف قاعدة بيانات جديد</button>
-            <button type="button" class="btn btn-gold" onclick="openDatabaseFile()">فتح ملف قاعدة بيانات موجود</button>
-            <button type="button" class="btn btn-ghost" onclick="disconnectDatabaseFile()">فصل والعودة لتخزين المتصفح</button>
-          </div>
-        </div>
-
-        <div class="card" style="margin-top:20px;">
-          <div class="card-title"><span>الحفظ على GitHub (مستودع خاص)</span></div>
-          <p class="hint" style="margin-bottom:12px;">
-            يحفظ النظام قاعدة البيانات كملف JSON داخل مستودع GitHub <b>خاص (Private)</b> يخصّك، فتصل إلى بياناتك من أي جهاز.
-            كل عملية حفظ تُنشئ إصدارًا (Commit) جديدًا، ويتأخر الرفع نحو 3 ثوانٍ بعد آخر تعديل لتجميع التعديلات.
-          </p>
-          <div class="ai-hint" style="border-color:var(--danger);margin-bottom:14px;">
-            ⚠️ لا تضع ملف البيانات أبدًا في مستودع عام (Public) أو في المستودع الذي تنشر منه الموقع على GitHub Pages — سيرفض النظام الربط بأي مستودع عام.
-            يُحفظ رمز الوصول في متصفح هذا الجهاز فقط (ليس داخل الملف ولا الكود)، فلا تشاركه مع أحد.
-          </div>
-          <ol style="margin:0 0 14px;padding-right:20px;font-size:13px;line-height:1.9;">
-            <li>أنشئ مستودعًا جديدًا على GitHub بوضع <b>Private</b>، وفعّل خيار <b>Add a README file</b>.</li>
-            <li>من GitHub: Settings ← Developer settings ← Personal access tokens ← <b>Fine-grained tokens</b> ← Generate new token.</li>
-            <li>في Repository access اختر <b>Only select repositories</b> وحدّد هذا المستودع فقط. وفي Permissions اجعل <b>Contents</b> = <b>Read and write</b>.</li>
-            <li>انسخ الرمز وعبّئ الحقول أدناه ثم اضغط "ربط".</li>
-          </ol>
-          <div id="gh-status-box" class="ai-hint" style="margin-bottom:16px;"></div>
-          <div class="form-grid">
-            <div class="field"><label for="gh-owner">اسم المستخدم (Owner)</label><input type="text" id="gh-owner" autocomplete="off" placeholder="مثال: mansour"></div>
-            <div class="field"><label for="gh-repo">اسم المستودع (Repository)</label><input type="text" id="gh-repo" autocomplete="off" placeholder="مثال: techbox-data"></div>
-            <div class="field"><label for="gh-path">مسار الملف</label><input type="text" id="gh-path" autocomplete="off" value="techbox-reports-database.json"></div>
-            <div class="field"><label for="gh-branch">الفرع (Branch)</label><input type="text" id="gh-branch" autocomplete="off" value="main"></div>
-            <div class="field"><label for="gh-token">رمز الوصول (Token)</label><input type="password" id="gh-token" autocomplete="new-password" placeholder="github_pat_..."></div>
-          </div>
-          <div class="btn-row">
-            <button type="button" class="btn btn-primary" onclick="connectGitHub()">ربط الحفظ على GitHub</button>
-            <button type="button" class="btn btn-ghost" onclick="disconnectGitHub()">فصل عن GitHub</button>
-          </div>
-        </div>
-
-        <div class="card" style="margin-top:20px;">
           <div class="card-title"><span>النسخ الاحتياطي والاستيراد</span></div>
-          <p class="hint" style="margin-bottom:14px;">نسخة احتياطية إضافية يمكن تصديرها يدويًا في أي وقت (سواء كنت تستخدم ملف قاعدة البيانات أو تخزين المتصفح)، لحفظ بياناتك أو نقلها إلى جهاز آخر.</p>
+          <p class="hint" style="margin-bottom:14px;">جميع البيانات محفوظة محليًا داخل هذا المتصفح فقط. يُنصح بتصدير نسخة احتياطية دوريًا للحفاظ على بياناتك أو نقلها إلى جهاز آخر.</p>
           <div class="btn-row">
             <button type="button" class="btn btn-primary" onclick="exportBackup()">تصدير نسخة احتياطية (JSON)</button>
             <button type="button" class="btn btn-gold" onclick="exportBackupExcel()">تصدير نسخة احتياطية (Excel)</button>
@@ -1174,7 +1129,7 @@
 /* =====================================================================
    قاعدة البيانات المحلية (Local Database) — مبنية على localStorage
    ===================================================================== */
-const DB_KEYS = { reports:'ctr_reports_v1', programs:'ctr_programs_v1', settings:'ctr_settings_v1', annual:'ctr_annual_reports_v1', generic:'ctr_generic_reports_v1', dashboardYears:'ctr_dashboard_years_v1', printLayout:'ctr_print_layout_v1', authHash:'ctr_auth_hash_v1', github:'ctr_github_cfg_v1' };
+const DB_KEYS = { reports:'ctr_reports_v1', programs:'ctr_programs_v1', settings:'ctr_settings_v1', annual:'ctr_annual_reports_v1', generic:'ctr_generic_reports_v1', dashboardYears:'ctr_dashboard_years_v1', printLayout:'ctr_print_layout_v1', authHash:'ctr_auth_hash_v1' };
 
 /* شعار المؤسسة الافتراضي (TechBox) — يُستخدم تلقائيًا إن لم يقم المستخدم برفع شعار آخر عبر الإعدادات.
    ملاحظة: هذا مسار نسبي لملف صورة، لذا يجب أن يكون ملف TechBox.jpeg موجودًا في نفس مجلد ملف الـ HTML
@@ -1192,41 +1147,18 @@ function saveJSON(key, value){
   catch(e){ toast('تعذّر حفظ البيانات محليًا في هذا المتصفح', 'error'); }
 }
 
-/* =====================================================================
-   قاعدة البيانات — ملف JSON مستقل خارج تخزين المتصفح (File System Access API)
-   جميع القراءات تتم من نسخة محفوظة في ذاكرة المتصفح طوال الجلسة (سريعة
-   وثابتة السرعة مهما كبر حجم البيانات)، والحفظ يتم إلى الملف الخارجي
-   بشكل مُجمّع (debounced) في الخلفية بعد كل تعديل، بدل كتابة متزامنة
-   تُبطئ الواجهة كما في localStorage التقليدي. إن لم يدعم المتصفح هذه
-   الميزة (مثل Firefox/Safari) أو لم يُربط ملف بعد، يُستخدم تخزين
-   المتصفح المحلي تلقائيًا كبديل متوافق مع الجميع.
-   ===================================================================== */
-let DB = { reports:[], programs:[], settings:null, annual:[], generic:[], dashboardYears:[], printLayout:null };
-let dbFileHandle = null;
-let dbSaveTimer = null;
-let dbIsDirty = false;
-let isFreshDatabase = false;
-let dbNeedsReconnect = false;
-let dbRememberedHandleForReconnect = null;
-let ghConfig = null;
-let ghSha = null;
-let ghReady = false;
-let ghSaving = false;
-let ghLoadError = '';
-const DB_FILE_SUGGESTED_NAME = 'techbox-reports-database.json';
-
-function getReports(){ return DB.reports; }
-function setReports(arr){ DB.reports = arr; scheduleDbSave(); }
-function getPrograms(){ return DB.programs; }
-function setPrograms(arr){ DB.programs = arr; scheduleDbSave(); }
-function getSettings(){ return DB.settings || defaultSettings(); }
-function setSettings(obj){ DB.settings = obj; scheduleDbSave(); }
-function getAnnualReports(){ return DB.annual; }
-function setAnnualReports(arr){ DB.annual = arr; scheduleDbSave(); }
-function getGenericReports(){ return DB.generic; }
-function setGenericReports(arr){ DB.generic = arr; scheduleDbSave(); }
-function getCustomDashboardYears(){ return DB.dashboardYears; }
-function setCustomDashboardYears(arr){ DB.dashboardYears = arr; scheduleDbSave(); }
+function getReports(){ return loadJSON(DB_KEYS.reports, []); }
+function setReports(arr){ saveJSON(DB_KEYS.reports, arr); }
+function getPrograms(){ return loadJSON(DB_KEYS.programs, []); }
+function setPrograms(arr){ saveJSON(DB_KEYS.programs, arr); }
+function getSettings(){ return loadJSON(DB_KEYS.settings, defaultSettings()); }
+function setSettings(obj){ saveJSON(DB_KEYS.settings, obj); }
+function getAnnualReports(){ return loadJSON(DB_KEYS.annual, []); }
+function setAnnualReports(arr){ saveJSON(DB_KEYS.annual, arr); }
+function getGenericReports(){ return loadJSON(DB_KEYS.generic, []); }
+function setGenericReports(arr){ saveJSON(DB_KEYS.generic, arr); }
+function getCustomDashboardYears(){ return loadJSON(DB_KEYS.dashboardYears, []); }
+function setCustomDashboardYears(arr){ saveJSON(DB_KEYS.dashboardYears, arr); }
 function addCustomDashboardYear(y){
   const arr = getCustomDashboardYears();
   if(!arr.includes(y)){ arr.push(y); setCustomDashboardYears(arr); }
@@ -1253,14 +1185,14 @@ function defaultPrintLayout(){
   return PRINT_SECTIONS.map(s=>({ key:s.key, visible:true }));
 }
 function getPrintLayout(){
-  const saved = DB.printLayout;
+  const saved = loadJSON(DB_KEYS.printLayout, null);
   if(!saved || !Array.isArray(saved) || saved.length===0) return defaultPrintLayout();
   const savedKeys = saved.map(i=>i.key);
   const merged = saved.slice();
   PRINT_SECTIONS.forEach(s=>{ if(!savedKeys.includes(s.key)) merged.push({ key:s.key, visible:true }); });
   return merged;
 }
-function setPrintLayout(arr){ DB.printLayout = arr; scheduleDbSave(); }
+function setPrintLayout(arr){ saveJSON(DB_KEYS.printLayout, arr); }
 
 function defaultSettings(){
   return {
@@ -1269,508 +1201,20 @@ function defaultSettings(){
   };
 }
 
-/* يُطبّع أي ملف قاعدة بيانات مفتوح من القرص: يضمن وجود كل الحقول المطلوبة
-   بالشكل الصحيح حتى لو كان الملف قديمًا أو ناقصًا. */
-function normalizeDbShape(parsed){
-  parsed = parsed || {};
-  return {
-    reports: Array.isArray(parsed.reports) ? parsed.reports : [],
-    programs: Array.isArray(parsed.programs) ? parsed.programs : [],
-    settings: parsed.settings || defaultSettings(),
-    annual: Array.isArray(parsed.annual) ? parsed.annual : [],
-    generic: Array.isArray(parsed.generic) ? parsed.generic : [],
-    dashboardYears: Array.isArray(parsed.dashboardYears) ? parsed.dashboardYears : [],
-    printLayout: Array.isArray(parsed.printLayout) ? parsed.printLayout : defaultPrintLayout()
-  };
-}
-
-/* يحمّل قاعدة البيانات إما من ملف مستقل مربوط مسبقًا، أو من تخزين المتصفح
-   المحلي كخيار بديل. ملاحظة تقنية مهمة: صلاحية الوصول لملف خارجي
-   (requestPermission) لا يمنحها المتصفح تلقائيًا إلا استجابةً لتفاعل
-   مباشر من المستخدم (ضغطة زر)، لذا يُكتفى هنا بفحص غير تفاعلي
-   (queryPermission) أثناء التحميل التلقائي؛ وإن لم تكن الصلاحية ممنوحة
-   بعد، يعمل النظام مؤقتًا على تخزين المتصفح ويعرض زر "إعادة الاتصال"
-   الذي يطلب الصلاحية بشكل صريح عند ضغطه. */
-function loadDbFromLocalStorage(){
-  DB.reports = loadJSON(DB_KEYS.reports, []);
-  DB.programs = loadJSON(DB_KEYS.programs, []);
-  DB.settings = loadJSON(DB_KEYS.settings, defaultSettings());
-  DB.annual = loadJSON(DB_KEYS.annual, []);
-  DB.generic = loadJSON(DB_KEYS.generic, []);
-  DB.dashboardYears = loadJSON(DB_KEYS.dashboardYears, []);
-  DB.printLayout = loadJSON(DB_KEYS.printLayout, null) || defaultPrintLayout();
-}
-async function loadDatabase(){
-  /* 1) الحفظ على GitHub (إن كان مربوطًا) */
-  ghConfig = loadJSON(DB_KEYS.github, null);
-  if(ghConfig && !ghConfig.token) ghConfig = null;
-  if(ghConfig){
-    let parsed = null;
-    try{
-      const r = await ghFetchFile();
-      if(r.status === 200){
-        try{ parsed = JSON.parse(r.text); ghSha = r.sha; }
-        catch(e){ ghLoadError = 'ملف قاعدة البيانات على GitHub تالف أو غير صالح'; }
-      }else if(r.status === 404){ ghLoadError = 'ملف قاعدة البيانات غير موجود على GitHub'; }
-      else if(r.status === 401 || r.status === 403){ ghLoadError = 'رفض GitHub الوصول — تحقق من الرمز وصلاحياته'; }
-      else{ ghLoadError = 'تعذّر تحميل البيانات من GitHub'; }
-    }catch(e){ ghLoadError = 'تعذّر الاتصال بـ GitHub — تحقق من الإنترنت'; }
-    if(parsed){ DB = normalizeDbShape(parsed); ghReady = true; ghLoadError = ''; return; }
-    /* تعذّر التحميل: نعرض النسخة المحلية فقط، ولا نرفع شيئًا إلى GitHub حتى تنجح إعادة المحاولة (حتى لا نكتب فوق بياناتك هناك) */
-    isFreshDatabase = false;
-    loadDbFromLocalStorage();
-    return;
-  }
-
-  /* 2) ملف مستقل على الجهاز (File System Access API) */
-  const handle = await getRememberedFileHandle();
-  if(handle){
-    try{
-      const granted = (await handle.queryPermission({ mode:'readwrite' })) === 'granted';
-      if(granted){
-        const file = await handle.getFile();
-        const text = await file.text();
-        DB = normalizeDbShape(JSON.parse(text));
-        dbFileHandle = handle;
-        return;
-      }else{
-        dbNeedsReconnect = true;
-        dbRememberedHandleForReconnect = handle;
-      }
-    }catch(e){
-      dbNeedsReconnect = true;
-      dbRememberedHandleForReconnect = handle;
-    }
-  }
-
-  /* 3) تخزين المتصفح المحلي */
-  isFreshDatabase = localStorage.getItem(DB_KEYS.programs) === null;
-  loadDbFromLocalStorage();
-}
-
-/* يُستدعى بضغطة زر من المستخدم (الإعدادات) لإعادة طلب صلاحية الوصول
-   لملف قاعدة بيانات كان مربوطًا سابقًا — تعمل لأن الضغطة نفسها تُعتبر
-   تفاعلًا مباشرًا يسمح للمتصفح بإظهار نافذة الصلاحية. */
-async function reconnectDatabaseFile(){
-  if(!dbRememberedHandleForReconnect){ toast('لا يوجد ملف سابق لإعادة الاتصال به', 'error'); return; }
-  try{
-    const granted = (await dbRememberedHandleForReconnect.requestPermission({ mode:'readwrite' })) === 'granted';
-    if(!granted){ toast('تم رفض صلاحية الوصول للملف', 'error'); return; }
-    const file = await dbRememberedHandleForReconnect.getFile();
-    const text = await file.text();
-    const parsed = JSON.parse(text);
-    if(!confirm('سيتم استبدال البيانات المعروضة حاليًا ببيانات الملف المربوط. هل تريد المتابعة؟')) return;
-    DB = normalizeDbShape(parsed);
-    dbFileHandle = dbRememberedHandleForReconnect;
-    dbNeedsReconnect = false;
-    renderDatabaseSettingsCard();
-    switchView(currentView);
-    toast('تم إعادة الاتصال بملف قاعدة البيانات بنجاح');
-  }catch(e){ toast('تعذّر إعادة الاتصال بالملف', 'error'); }
-}
-
-/* ---------- الحفظ المُجمّع (debounced) ---------- */
-function scheduleDbSave(){
-  dbIsDirty = true;
-  updateDbStatusIndicator('saving');
-  clearTimeout(dbSaveTimer);
-  dbSaveTimer = setTimeout(flushDbSave, (ghConfig && ghReady) ? 3000 : 700);
-}
-async function flushDbSaveNow(){
-  dbIsDirty = true;
-  clearTimeout(dbSaveTimer);
-  while(ghSaving){ await new Promise(r=>setTimeout(r,100)); }
-  await flushDbSave();
-}
-async function flushDbSave(){
-  if(!dbIsDirty) return;
-
-  /* الحفظ على GitHub: عملية رفع واحدة في كل مرة، وإن حدثت تعديلات أثناءها تُرفع بعدها */
-  if(ghConfig && ghReady){
-    if(ghSaving) return;
-    ghSaving = true;
-    dbIsDirty = false;
-    let failed = false;
-    try{
-      await ghPushDb();
-      updateDbStatusIndicator('saved-github');
-    }catch(err){
-      if(err.status === 409 || (err.status === 422 && /sha/i.test(err.message || ''))){
-        failed = !(await ghResolveConflict());
-      }else{
-        failed = true;
-        updateDbStatusIndicator('error');
-        toast((err.status === 401 || err.status === 403)
-          ? 'رفض GitHub الحفظ — تحقق من الرمز وصلاحياته'
-          : 'تعذّر الحفظ على GitHub — ستُعاد المحاولة عند التعديل التالي', 'error');
-      }
-      if(failed){ persistToLocalStorage(); dbIsDirty = true; }
-    }finally{
-      ghSaving = false;
-    }
-    if(dbIsDirty && !failed) scheduleDbSave();
-    return;
-  }
-
-  dbIsDirty = false;
-  if(dbFileHandle){
-    try{
-      const writable = await dbFileHandle.createWritable();
-      await writable.write(JSON.stringify(DB));
-      await writable.close();
-      updateDbStatusIndicator('saved-file');
-      return;
-    }catch(e){
-      updateDbStatusIndicator('error');
-      toast('تعذّر الحفظ في ملف قاعدة البيانات — تم الحفظ احتياطيًا في تخزين المتصفح', 'error');
-    }
-  }
-  persistToLocalStorage();
-  updateDbStatusIndicator('saved-local');
-}
-function persistToLocalStorage(){
-  saveJSON(DB_KEYS.reports, DB.reports);
-  saveJSON(DB_KEYS.programs, DB.programs);
-  saveJSON(DB_KEYS.settings, DB.settings);
-  saveJSON(DB_KEYS.annual, DB.annual);
-  saveJSON(DB_KEYS.generic, DB.generic);
-  saveJSON(DB_KEYS.dashboardYears, DB.dashboardYears);
-  saveJSON(DB_KEYS.printLayout, DB.printLayout);
-}
-
-/* ---------- تذكّر ملف القاعدة المربوط بين الجلسات (IndexedDB، للمقبض فقط وليس للبيانات) ---------- */
-function openHandleDB(){
-  return new Promise((resolve, reject)=>{
-    const req = indexedDB.open('ctr_filehandle_store', 1);
-    req.onupgradeneeded = ()=>{ req.result.createObjectStore('handles'); };
-    req.onsuccess = ()=>resolve(req.result);
-    req.onerror = ()=>reject(req.error);
-  });
-}
-async function rememberFileHandle(handle){
-  try{
-    const db = await openHandleDB();
-    await new Promise((resolve,reject)=>{
-      const tx = db.transaction('handles','readwrite');
-      tx.objectStore('handles').put(handle, 'dbFile');
-      tx.oncomplete = resolve; tx.onerror = ()=>reject(tx.error);
-    });
-  }catch(e){ /* تجاهل: الربط بالملف سيبقى فعّالًا لهذه الجلسة فقط */ }
-}
-async function getRememberedFileHandle(){
-  try{
-    const db = await openHandleDB();
-    return await new Promise((resolve)=>{
-      const tx = db.transaction('handles','readonly');
-      const req = tx.objectStore('handles').get('dbFile');
-      req.onsuccess = ()=>resolve(req.result || null);
-      req.onerror = ()=>resolve(null);
-    });
-  }catch(e){ return null; }
-}
-async function forgetRememberedFileHandle(){
-  try{
-    const db = await openHandleDB();
-    const tx = db.transaction('handles','readwrite');
-    tx.objectStore('handles').delete('dbFile');
-  }catch(e){ /* تجاهل */ }
-}
-function fileSystemAccessSupported(){
-  return typeof window.showSaveFilePicker === 'function' && typeof window.showOpenFilePicker === 'function';
-}
-
-/* ---------- إنشاء / فتح / فصل ملف قاعدة البيانات (من الإعدادات) ---------- */
-async function createDatabaseFile(){
-  if(!fileSystemAccessSupported()){
-    toast('هذا المتصفح لا يدعم ربط ملف قاعدة بيانات مستقل. يُرجى استخدام Chrome أو Edge لهذه الميزة', 'error');
-    return;
-  }
-  if(ghConfig && !confirm('النظام مربوط حاليًا بـ GitHub. ربط ملف محلي سيُلغي الحفظ على GitHub. هل تريد المتابعة؟')) return;
-  try{
-    const handle = await window.showSaveFilePicker({
-      suggestedName: DB_FILE_SUGGESTED_NAME,
-      types: [{ description:'ملف قاعدة بيانات JSON', accept:{'application/json':['.json']} }]
-    });
-    ghClearConfig();
-    dbFileHandle = handle;
-    dbNeedsReconnect = false;
-    await rememberFileHandle(handle);
-    await flushDbSaveNow();
-    renderDatabaseSettingsCard();
-    toast('تم إنشاء ملف قاعدة البيانات وربطه بنجاح');
-  }catch(e){ if(e.name !== 'AbortError') toast('تعذّر إنشاء ملف قاعدة البيانات', 'error'); }
-}
-async function openDatabaseFile(){
-  if(!fileSystemAccessSupported()){
-    toast('هذا المتصفح لا يدعم ربط ملف قاعدة بيانات مستقل. يُرجى استخدام Chrome أو Edge لهذه الميزة', 'error');
-    return;
-  }
-  if(ghConfig && !confirm('النظام مربوط حاليًا بـ GitHub. ربط ملف محلي سيُلغي الحفظ على GitHub. هل تريد المتابعة؟')) return;
-  try{
-    const [handle] = await window.showOpenFilePicker({
-      types: [{ description:'ملف قاعدة بيانات JSON', accept:{'application/json':['.json']} }]
-    });
-    const file = await handle.getFile();
-    const text = await file.text();
-    let parsed;
-    try{ parsed = JSON.parse(text); }
-    catch(e){ toast('صيغة الملف غير صحيحة — تأكد أنه ملف قاعدة بيانات JSON صالح', 'error'); return; }
-    if(!confirm('سيتم استبدال البيانات المعروضة حاليًا ببيانات هذا الملف. هل تريد المتابعة؟')) return;
-    DB = normalizeDbShape(parsed);
-    ghClearConfig();
-    dbFileHandle = handle;
-    dbNeedsReconnect = false;
-    await rememberFileHandle(handle);
-    renderDatabaseSettingsCard();
-    switchView(currentView);
-    toast('تم تحميل قاعدة البيانات من الملف بنجاح');
-  }catch(e){ if(e.name !== 'AbortError') toast('تعذّر فتح الملف', 'error'); }
-}
-async function disconnectDatabaseFile(){
-  if(!confirm('سيتم الفصل عن ملف قاعدة البيانات والعودة لاستخدام تخزين المتصفح المحلي (بياناتك الحالية ستُحفظ في المتصفح أولًا). هل تريد المتابعة؟')) return;
-  persistToLocalStorage();
-  dbFileHandle = null;
-  dbNeedsReconnect = false;
-  dbRememberedHandleForReconnect = null;
-  await forgetRememberedFileHandle();
-  renderDatabaseSettingsCard();
-  toast('تم الفصل عن الملف — يعمل النظام الآن على تخزين المتصفح المحلي');
-}
-function updateDbStatusIndicator(state){
-  const el = document.getElementById('db-save-status');
-  if(!el) return;
-  const time = new Date().toLocaleTimeString('ar-EG');
-  if(state === 'saving') el.textContent = 'جارٍ الحفظ...';
-  else if(state === 'saved-file') el.textContent = '✓ تم الحفظ في ملف قاعدة البيانات — ' + time;
-  else if(state === 'saved-local') el.textContent = '✓ تم الحفظ في تخزين المتصفح المحلي — ' + time;
-  else if(state === 'saved-github') el.textContent = '✓ تم الحفظ على GitHub — ' + time;
-  else if(state === 'error') el.textContent = '⚠️ حدث خطأ أثناء الحفظ';
-}
-function renderDatabaseSettingsCard(){
-  const box = document.getElementById('db-status-box');
-  if(!box) return;
-  if(ghConfig){
-    box.innerHTML = `☁️ الحفظ يتم حاليًا على <b>GitHub</b> (راجع بطاقة GitHub أدناه). ربط ملف محلي سيُلغي الحفظ على GitHub.<br><span id="db-save-status" class="hint"></span>`;
-    return;
-  }
-  if(dbFileHandle){
-    box.innerHTML = `✅ متصل بملف قاعدة بيانات مستقل: <b>${escapeHtml(dbFileHandle.name || 'ملف محدد')}</b><br><span id="db-save-status" class="hint"></span>`;
-  }else if(dbNeedsReconnect){
-    box.innerHTML = `⚠️ كان النظام متصلًا بملف قاعدة بيانات سابقًا، لكن المتصفح يطلب إعادة تأكيد الصلاحية (إجراء أمني طبيعي). يعمل النظام الآن مؤقتًا على تخزين المتصفح.<br>
-      <button type="button" class="btn btn-gold btn-sm" style="margin-top:8px;" onclick="reconnectDatabaseFile()">إعادة الاتصال بملف قاعدة البيانات</button>
-      <div id="db-save-status" class="hint" style="margin-top:6px;"></div>`;
-  }else if(!fileSystemAccessSupported()){
-    box.innerHTML = `💾 يعمل النظام حاليًا على تخزين المتصفح المحلي (هذا المتصفح لا يدعم ربط ملف قاعدة بيانات مستقل).<br><span id="db-save-status" class="hint"></span>`;
-  }else{
-    box.innerHTML = `💾 يعمل النظام حاليًا على تخزين المتصفح المحلي. لم يتم ربط ملف قاعدة بيانات مستقل بعد.<br><span id="db-save-status" class="hint"></span>`;
-  }
-}
-
-/* =====================================================================
-   الحفظ على GitHub — ملف JSON داخل مستودع خاص (Private) عبر GitHub API.
-   رمز الوصول يُحفظ في متصفح هذا الجهاز فقط (ليس داخل ملف القاعدة ولا في كود الصفحة).
-   يرفض النظام الربط بأي مستودع عام (Public) حمايةً للبيانات.
-   ===================================================================== */
-function b64EncodeUtf8(str){
-  const bytes = new TextEncoder().encode(str);
-  let bin = '';
-  const chunk = 0x8000;
-  for(let i = 0; i < bytes.length; i += chunk){
-    bin += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
-  }
-  return btoa(bin);
-}
-function b64DecodeUtf8(b64){
-  const bin = atob(String(b64).replace(/\s/g, ''));
-  const bytes = new Uint8Array(bin.length);
-  for(let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-  return new TextDecoder().decode(bytes);
-}
-function ghEncodePath(p){
-  return String(p).split('/').map(encodeURIComponent).join('/');
-}
-async function ghRequest(cfg, url, opts){
-  opts = opts || {};
-  const headers = {
-    'Authorization': 'Bearer ' + cfg.token,
-    'Accept': 'application/vnd.github+json',
-    'X-GitHub-Api-Version': '2022-11-28'
-  };
-  if(opts.body) headers['Content-Type'] = 'application/json';
-  const res = await fetch('https://api.github.com' + url, {
-    method: opts.method || 'GET', headers: headers, body: opts.body, cache: 'no-store'
-  });
-  let json = null;
-  try{ json = await res.json(); }catch(e){ /* قد لا يوجد جسم للرد */ }
-  return { status: res.status, json: json };
-}
-async function ghFetchFile(cfg){
-  cfg = cfg || ghConfig;
-  const base = '/repos/' + cfg.owner + '/' + cfg.repo;
-  const r = await ghRequest(cfg, base + '/contents/' + ghEncodePath(cfg.path) + '?ref=' + encodeURIComponent(cfg.branch));
-  if(r.status !== 200) return { status: r.status, message: r.json && r.json.message };
-  if(!r.json || Array.isArray(r.json)) return { status: 400, message: 'المسار يشير إلى مجلد وليس ملفًا' };
-  let b64 = r.json.content;
-  if(!b64 || r.json.encoding !== 'base64'){
-    /* الملفات الأكبر من 1 ميجابايت لا يرجع محتواها في الرد الأول، فنقرؤها كـ blob */
-    const b = await ghRequest(cfg, base + '/git/blobs/' + r.json.sha);
-    if(b.status !== 200) return { status: b.status, message: b.json && b.json.message };
-    b64 = b.json.content;
-  }
-  return { status: 200, text: b64DecodeUtf8(b64), sha: r.json.sha };
-}
-async function ghPushDb(){
-  const cfg = ghConfig;
-  const body = {
-    message: 'تحديث قاعدة البيانات — ' + new Date().toISOString(),
-    content: b64EncodeUtf8(JSON.stringify(DB)),
-    branch: cfg.branch
-  };
-  if(ghSha) body.sha = ghSha;
-  const r = await ghRequest(cfg, '/repos/' + cfg.owner + '/' + cfg.repo + '/contents/' + ghEncodePath(cfg.path),
-                            { method:'PUT', body: JSON.stringify(body) });
-  if(r.status === 200 || r.status === 201){
-    ghSha = r.json && r.json.content ? r.json.content.sha : ghSha;
-    return;
-  }
-  const err = new Error((r.json && r.json.message) || ('HTTP ' + r.status));
-  err.status = r.status;
-  throw err;
-}
-/* تعارض: الملف على GitHub تغيّر من مكان آخر منذ آخر تحميل */
-async function ghResolveConflict(){
-  let r;
-  try{ r = await ghFetchFile(); }
-  catch(e){ toast('تعذّر الاتصال بـ GitHub لحل التعارض', 'error'); return false; }
-  if(r.status !== 200){ toast('تعذّر قراءة الملف من GitHub لحل التعارض', 'error'); return false; }
-  const overwrite = confirm('تم تعديل ملف قاعدة البيانات على GitHub من مكان آخر (جهاز أو متصفح آخر) منذ آخر مرة حمّلته.\n\nموافق = الكتابة فوق نسخة GitHub بنسختك الحالية (تُفقد تعديلات المكان الآخر).\nإلغاء = تحميل نسخة GitHub وتجاهل تعديلاتك الأخيرة غير المرفوعة.');
-  if(overwrite){
-    ghSha = r.sha;
-    try{ await ghPushDb(); updateDbStatusIndicator('saved-github'); return true; }
-    catch(e){ toast('تعذّر الحفظ على GitHub', 'error'); return false; }
-  }
-  try{ DB = normalizeDbShape(JSON.parse(r.text)); }
-  catch(e){ toast('ملف GitHub تالف', 'error'); return false; }
-  ghSha = r.sha;
-  switchView(currentView);
-  toast('تم تحميل أحدث نسخة من GitHub');
-  return true;
-}
-function ghClearConfig(){
-  try{ localStorage.removeItem(DB_KEYS.github); }catch(e){}
-  ghConfig = null; ghReady = false; ghSha = null; ghLoadError = '';
-  renderGitHubSettingsCard();
-  renderDatabaseSettingsCard();
-}
-async function connectGitHub(){
-  const val = id => (document.getElementById(id).value || '').trim();
-  const owner = val('gh-owner'), repo = val('gh-repo'), token = val('gh-token');
-  const branch = val('gh-branch') || 'main';
-  const path = (val('gh-path') || 'techbox-reports-database.json').replace(/^\/+/, '');
-  if(!owner || !repo || !token){ toast('يرجى تعبئة اسم المستخدم واسم المستودع والرمز', 'error'); return; }
-  if(!/^[A-Za-z0-9_.-]+$/.test(owner) || !/^[A-Za-z0-9_.-]+$/.test(repo)){ toast('اسم المستخدم أو المستودع غير صالح', 'error'); return; }
-  if(path.indexOf('..') !== -1){ toast('مسار الملف غير صالح', 'error'); return; }
-  const cfg = { owner: owner, repo: repo, branch: branch, path: path, token: token };
-
-  toast('جارٍ الاتصال بـ GitHub...');
-  let repoRes;
-  try{ repoRes = await ghRequest(cfg, '/repos/' + owner + '/' + repo); }
-  catch(e){ toast('تعذّر الاتصال بـ GitHub — تحقق من الإنترنت', 'error'); return; }
-  if(repoRes.status === 401){ toast('الرمز غير صالح أو منتهي', 'error'); return; }
-  if(repoRes.status === 404){ toast('المستودع غير موجود، أو أن الرمز لا يملك صلاحية الوصول إليه', 'error'); return; }
-  if(repoRes.status !== 200){ toast('تعذّر التحقق من المستودع (رمز الخطأ ' + repoRes.status + ')', 'error'); return; }
-  if(repoRes.json.private !== true){
-    alert('تم رفض الربط: هذا المستودع عام (Public) ويمكن لأي شخص قراءة بياناتك.\n\nأنشئ مستودعًا خاصًا (Private) واربط النظام به.');
-    return;
-  }
-  if(repoRes.json.permissions && repoRes.json.permissions.push === false){
-    toast('الرمز لا يملك صلاحية الكتابة (Contents: Read and write)', 'error'); return;
-  }
-
-  let fileRes;
-  try{ fileRes = await ghFetchFile(cfg); }
-  catch(e){ toast('تعذّر الاتصال بـ GitHub — تحقق من الإنترنت', 'error'); return; }
-
-  if(fileRes.status === 200){
-    let parsed;
-    try{ parsed = JSON.parse(fileRes.text); }
-    catch(e){ toast('الملف الموجود على GitHub ليس ملف قاعدة بيانات JSON صالحًا', 'error'); return; }
-    if(!confirm('يوجد ملف بهذا المسار على GitHub. سيتم تحميل بياناته واستبدال البيانات المعروضة حاليًا. هل تريد المتابعة؟')) return;
-    DB = normalizeDbShape(parsed);
-    ghSha = fileRes.sha;
-    ghConfig = cfg; ghReady = true; ghLoadError = '';
-  }else if(fileRes.status === 404){
-    if(!confirm('لا يوجد ملف بهذا المسار في المستودع. سيتم إنشاؤه الآن ببياناتك الحالية. هل تريد المتابعة؟')) return;
-    ghSha = null; ghConfig = cfg; ghReady = true;
-    try{ await ghPushDb(); }
-    catch(e){
-      ghConfig = null; ghReady = false; ghSha = null;
-      toast('تعذّر إنشاء الملف على GitHub: ' + (e.message || ''), 'error');
-      return;
-    }
-  }else{
-    toast('تعذّر قراءة الملف من GitHub (رمز الخطأ ' + fileRes.status + ')', 'error'); return;
-  }
-
-  /* إلغاء أي ربط بملف محلي (الوجهتان لا تعملان معًا) */
-  dbFileHandle = null; dbNeedsReconnect = false; dbRememberedHandleForReconnect = null;
-  await forgetRememberedFileHandle();
-  /* بعد الربط تصبح النسخة المحلية مطابقة لـ GitHub، فنلغي أي حفظ كان مجدولًا قبل الربط حتى لا يُنشأ إصدار مكرر */
-  clearTimeout(dbSaveTimer); dbIsDirty = false;
-  saveJSON(DB_KEYS.github, cfg);
-  document.getElementById('gh-token').value = '';
-  renderGitHubSettingsCard();
-  renderDatabaseSettingsCard();
-  switchView(currentView);
-  toast('تم ربط النظام بمستودع GitHub الخاص بنجاح');
-}
-async function disconnectGitHub(){
-  if(!ghConfig){ toast('النظام غير مربوط بـ GitHub', 'error'); return; }
-  if(!confirm('سيتم فصل النظام عن GitHub والعودة لتخزين المتصفح المحلي (تُحفظ نسخة من بياناتك الحالية في المتصفح أولًا). الملف الموجود على GitHub يبقى كما هو. هل تريد المتابعة؟')) return;
-  persistToLocalStorage();
-  ghClearConfig();
-  toast('تم الفصل عن GitHub — يعمل النظام الآن على تخزين المتصفح المحلي');
-}
-async function retryGitHubLoad(){
-  if(!ghConfig){ return; }
-  let r;
-  try{ r = await ghFetchFile(); }
-  catch(e){ toast('تعذّر الاتصال بـ GitHub — تحقق من الإنترنت', 'error'); return; }
-  if(r.status !== 200){ toast('تعذّر التحميل من GitHub (رمز الخطأ ' + r.status + ')', 'error'); return; }
-  let parsed;
-  try{ parsed = JSON.parse(r.text); }
-  catch(e){ toast('ملف GitHub تالف أو غير صالح', 'error'); return; }
-  if(!confirm('سيتم استبدال البيانات المعروضة (بما فيها أي تعديلات لم تُرفع) بنسخة GitHub. هل تريد المتابعة؟')) return;
-  DB = normalizeDbShape(parsed);
-  ghSha = r.sha; ghReady = true; ghLoadError = '';
-  clearTimeout(dbSaveTimer); dbIsDirty = false;
-  renderGitHubSettingsCard();
-  renderDatabaseSettingsCard();
-  switchView(currentView);
-  toast('تم تحميل البيانات من GitHub');
-}
-function renderGitHubSettingsCard(){
-  const box = document.getElementById('gh-status-box');
-  if(!box) return;
-  if(ghConfig && ghReady){
-    box.innerHTML = '✅ متصل بمستودع GitHub الخاص: <b>' + escapeHtml(ghConfig.owner + '/' + ghConfig.repo) + '</b><br>الملف: <b>' + escapeHtml(ghConfig.path) + '</b> — الفرع: <b>' + escapeHtml(ghConfig.branch) + '</b>';
-  }else if(ghConfig){
-    box.innerHTML = '⚠️ ' + escapeHtml(ghLoadError || 'لم يتم تحميل البيانات من GitHub') + '. الحفظ على GitHub متوقف حاليًا حمايةً لبياناتك هناك.<br>' +
-      '<button type="button" class="btn btn-gold btn-sm" style="margin-top:8px;" onclick="retryGitHubLoad()">إعادة المحاولة</button>';
-  }else{
-    box.innerHTML = '☁️ غير مربوط بـ GitHub. يعمل النظام حاليًا على تخزين المتصفح أو ملف محلي.';
-  }
-}
-
 function seedIfFirstRun(){
-  if(isFreshDatabase){
-    DB.programs = [
+  if(localStorage.getItem(DB_KEYS.programs) === null){
+    setPrograms([
       { id: uid(), name:'دورة مهارات التواصل الفعّال', category:'دورة تدريبية', targetGroup:'الموظفون الجدد', defaultDuration:12, provider:'مدرب داخلي' },
       { id: uid(), name:'ورشة إدارة الوقت وتحديد الأولويات', category:'ورشة عمل', targetGroup:'جميع المستويات الإدارية', defaultDuration:6, provider:'مدرب خارجي' },
       { id: uid(), name:'برنامج تأهيل القيادات الإشرافية', category:'برنامج تأهيلي', targetGroup:'المشرفون ورؤساء الأقسام', defaultDuration:30, provider:'جهة تدريب متخصصة' }
-    ];
-    scheduleDbSave();
+    ]);
   }
+  if(localStorage.getItem(DB_KEYS.reports) === null){ setReports([]); }
+  if(localStorage.getItem(DB_KEYS.settings) === null){ setSettings(defaultSettings()); }
+  if(localStorage.getItem(DB_KEYS.annual) === null){ setAnnualReports([]); }
+  if(localStorage.getItem(DB_KEYS.generic) === null){ setGenericReports([]); }
+  if(localStorage.getItem(DB_KEYS.dashboardYears) === null){ setCustomDashboardYears([]); }
+  if(localStorage.getItem(DB_KEYS.printLayout) === null){ setPrintLayout(defaultPrintLayout()); }
 }
 
 function uid(){ return 'id-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,8); }
@@ -1980,9 +1424,6 @@ function computeDashboardStats(year){
    ===================================================================== */
 function computeAlerts(){
   const alerts = [];
-  if(ghConfig && !ghReady){
-    alerts.push({ level:'danger', icon:'☁️', text:(ghLoadError || 'لم يتم تحميل البيانات من GitHub') + ' — الحفظ على GitHub متوقف. أعد المحاولة من الإعدادات.' });
-  }
   const now = new Date();
   const currentYm = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
   const prevDate = new Date(now.getFullYear(), now.getMonth()-1, 1);
@@ -1994,10 +1435,10 @@ function computeAlerts(){
 
   /* 1) تقرير الشهر السابق (المفترض إنجازه) وتقرير الشهر الحالي (تذكير) */
   if(!prevReport){
-    alerts.push({ level:'danger', icon:'⚠️', text:`تقرير ${monthNameOnly(prevYm)} ${prevYm.split('-')[0]} لم يتم إنشاؤه بعد.` });
+    alerts.push({ level:'danger', icon:'', text:`تقرير ${monthNameOnly(prevYm)} ${prevYm.split('-')[0]} لم يتم إنشاؤه بعد.` });
   }
   if(!currentReport){
-    alerts.push({ level:'warning', icon:'⚠️', text:`تقرير ${monthNameOnly(currentYm)} ${currentYm.split('-')[0]} لم يتم إنشاؤه بعد.` });
+    alerts.push({ level:'warning', icon:'', text:`تقرير ${monthNameOnly(currentYm)} ${currentYm.split('-')[0]} لم يتم إنشاؤه بعد.` });
   }
 
   /* 2) برامج متأخرة أو ضعيفة الإنجاز ضمن آخر تقريرين (الحالي والسابق) */
@@ -2009,7 +1450,7 @@ function computeAlerts(){
         const key = r.month+'|'+(p.name||'');
         if(!seenProgramAlerts.has(key)){
           seenProgramAlerts.add(key);
-          alerts.push({ level:'danger', icon:'🔴', text:`يوجد برنامج متأخر "${p.name||'غير مسمى'}" (${formatMonth(r.month)}) بنسبة إنجاز ${completion}%.` });
+          alerts.push({ level:'danger', icon:'', text:`يوجد برنامج متأخر "${p.name||'غير مسمى'}" (${formatMonth(r.month)}) بنسبة إنجاز ${completion}%.` });
         }
       }
     });
@@ -2024,7 +1465,7 @@ function computeAlerts(){
     );
     allDepartments.forEach(dept=>{
       if(!departmentsReportedPrevMonth.has(dept)){
-        alerts.push({ level:'warning', icon:'⚠️', text:`لم يتم إدخال التقرير الشهري لقسم "${dept}" عن شهر ${monthNameOnly(prevYm)}.` });
+        alerts.push({ level:'warning', icon:'', text:`لم يتم إدخال التقرير الشهري لقسم "${dept}" عن شهر ${monthNameOnly(prevYm)}.` });
       }
     });
   }
@@ -2045,7 +1486,7 @@ function renderNotifications(){
   }
 
   if(alerts.length === 0){
-    panelBody.innerHTML = `<p class="hint">✅ لا توجد تنبيهات حاليًا — كل التقارير والبرامج على المسار الصحيح.</p>`;
+    panelBody.innerHTML = `<p class="hint">لا توجد تنبيهات حاليًا — كل التقارير والبرامج على المسار الصحيح.</p>`;
   }else{
     panelBody.innerHTML = `<div class="alerts-list">${alerts.map(a=>`
       <div class="alert-item alert-${a.level}">
@@ -3803,11 +3244,11 @@ function runComparison(){
    titleKeys تُستخدم لعرض عنوان مميز لكل تقرير محفوظ في جدول الأرشيف. */
 const REPORT_TEMPLATES = {
   monthly:{
-    label:'التقرير الشهري', icon:'📅', kind:'builtin-monthly',
+    label:'التقرير الشهري', icon:'', kind:'builtin-monthly',
     desc:'تقرير شامل لأنشطة البرامج والدورات خلال شهر كامل، مع مؤشرات الأداء والأهداف.'
   },
   weekly:{
-    label:'التقرير الأسبوعي', icon:'🗓️', kind:'generic',
+    label:'التقرير الأسبوعي', icon:'', kind:'generic',
     desc:'ملخص أسبوعي للأنشطة والمهام والمعوقات وخطة الأسبوع القادم.',
     titleKeys:['periodFrom','periodTo'],
     fields:[
@@ -3824,7 +3265,7 @@ const REPORT_TEMPLATES = {
     ]
   },
   daily:{
-    label:'التقرير اليومي', icon:'☀️', kind:'generic',
+    label:'التقرير اليومي', icon:'', kind:'generic',
     desc:'تقرير سريع للمهام المنجزة والمؤجلة خلال يوم عمل واحد.',
     titleKeys:['date'],
     fields:[
@@ -3838,7 +3279,7 @@ const REPORT_TEMPLATES = {
     ]
   },
   activity:{
-    label:'تقرير نشاط', icon:'📌', kind:'generic',
+    label:'تقرير نشاط', icon:'', kind:'generic',
     desc:'توثيق نشاط أو لقاء محدد: الهدف، الوصف، النتائج والتوصيات.',
     titleKeys:['activityName'],
     fields:[
@@ -3855,7 +3296,7 @@ const REPORT_TEMPLATES = {
     ]
   },
   course:{
-    label:'تقرير دورة تدريبية', icon:'🎓', kind:'generic',
+    label:'تقرير دورة تدريبية', icon:'', kind:'generic',
     desc:'تقرير مفصّل عن دورة تدريبية واحدة: المحتوى، التقييم والنتائج.',
     titleKeys:['courseName'],
     fields:[
@@ -3891,7 +3332,7 @@ const REPORT_TEMPLATES = {
     ]
   },
   project:{
-    label:'تقرير إنجاز مشروع', icon:'🚀', kind:'generic',
+    label:'تقرير إنجاز مشروع', icon:'', kind:'generic',
     desc:'حالة إنجاز مشروع: الأهداف المحققة، التحديات والدروس المستفادة.',
     titleKeys:['projectName'],
     fields:[
@@ -3909,7 +3350,7 @@ const REPORT_TEMPLATES = {
     ]
   },
   incident:{
-    label:'تقرير حادث / مشكلة', icon:'⚠️', kind:'generic',
+    label:'تقرير حادث / مشكلة', icon:'', kind:'generic',
     desc:'توثيق حادثة أو مشكلة: الوصف، الإجراءات الفورية وتوصيات منع التكرار.',
     titleKeys:['date','incidentType'],
     fields:[
@@ -3927,7 +3368,7 @@ const REPORT_TEMPLATES = {
     ]
   },
   annual:{
-    label:'التقرير السنوي', icon:'📊', kind:'builtin-annual',
+    label:'التقرير السنوي', icon:'', kind:'builtin-annual',
     desc:'تقرير سنوي مجمّع تلقائيًا من كل التقارير الشهرية المحفوظة.'
   }
 };
@@ -4284,8 +3725,6 @@ function renderSettingsView(){
   renderSettingsSignatures();
   renderLogoPreview(s.logoDataUrl);
   renderSettingsCustomYears();
-  renderDatabaseSettingsCard();
-  renderGitHubSettingsCard();
 }
 function renderSettingsCustomYears(){
   const container = document.getElementById('settings-custom-years-list');
@@ -4607,18 +4046,14 @@ function importBackup(file){
   };
   reader.readAsText(file);
 }
-async function wipeAllData(){
-  if(!confirm('سيتم حذف جميع التقارير والبرامج والإعدادات نهائيًا (من المتصفح أو ملف قاعدة البيانات المربوط أو GitHub). هل أنت متأكد؟')) return;
+function wipeAllData(){
+  if(!confirm('سيتم حذف جميع التقارير والبرامج والإعدادات نهائيًا من هذا المتصفح. هل أنت متأكد؟')) return;
   if(!confirm('تأكيد أخير: هذا الإجراء لا يمكن التراجع عنه. هل تريد المتابعة؟')) return;
-  DB = { reports:[], programs:[], settings:defaultSettings(), annual:[], generic:[], dashboardYears:[], printLayout:defaultPrintLayout() };
-  await flushDbSaveNow();
   localStorage.removeItem(DB_KEYS.reports);
   localStorage.removeItem(DB_KEYS.programs);
   localStorage.removeItem(DB_KEYS.settings);
   localStorage.removeItem(DB_KEYS.annual);
   localStorage.removeItem(DB_KEYS.generic);
-  localStorage.removeItem(DB_KEYS.dashboardYears);
-  localStorage.removeItem(DB_KEYS.printLayout);
   toast('تم حذف جميع البيانات');
   setTimeout(()=>location.reload(), 800);
 }
@@ -4914,10 +4349,10 @@ async function attemptLogin(){
   }
 }
 
-async function unlockApp(){
+function unlockApp(){
   document.getElementById('lock-screen').classList.add('hidden');
   document.getElementById('app-root').classList.remove('hidden');
-  await initializeApp();
+  initializeApp();
 }
 
 function logoutApp(){
@@ -4971,26 +4406,13 @@ function initializeApp(){
   seedIfFirstRun();
   updateSidebarBrand();
   switchView('dashboard');
-  if(ghConfig && !ghReady && ghLoadError){
-    toast('⚠️ ' + ghLoadError + ' — الحفظ على GitHub متوقف. أعد المحاولة من الإعدادات.', 'error');
-  }
 }
 
-window.addEventListener('beforeunload', e=>{
-  if(dbIsDirty || ghSaving){ e.preventDefault(); e.returnValue = ''; return ''; }
-});
-window.addEventListener('pagehide', ()=>{
-  if(dbIsDirty && !dbFileHandle && !(ghConfig && ghReady)) persistToLocalStorage();
-});
-
-(async function bootstrapApp(){
-  await loadDatabase();
-  renderLockScreenBrand();
-  seedAuthIfFirstRun();
-  if(sessionStorage.getItem(AUTH_SESSION_KEY) === '1'){
-    await unlockApp();
-  }
-})();
+renderLockScreenBrand();
+seedAuthIfFirstRun();
+if(sessionStorage.getItem(AUTH_SESSION_KEY) === '1'){
+  unlockApp();
+}
 </script>
 </body>
 </html>
