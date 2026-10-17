@@ -1096,6 +1096,36 @@
         </div>
 
         <div class="card" style="margin-top:20px;">
+          <div class="card-title"><span>الحفظ على GitHub (مستودع خاص)</span></div>
+          <p class="hint" style="margin-bottom:12px;">
+            يحفظ النظام قاعدة البيانات كملف JSON داخل مستودع GitHub <b>خاص (Private)</b> يخصّك، فتصل إلى بياناتك من أي جهاز.
+            كل عملية حفظ تُنشئ إصدارًا (Commit) جديدًا، ويتأخر الرفع نحو 3 ثوانٍ بعد آخر تعديل لتجميع التعديلات.
+          </p>
+          <div class="ai-hint" style="border-color:var(--danger);margin-bottom:14px;">
+            ⚠️ لا تضع ملف البيانات أبدًا في مستودع عام (Public) أو في المستودع الذي تنشر منه الموقع على GitHub Pages — سيرفض النظام الربط بأي مستودع عام.
+            يُحفظ رمز الوصول في متصفح هذا الجهاز فقط (ليس داخل الملف ولا الكود)، فلا تشاركه مع أحد.
+          </div>
+          <ol style="margin:0 0 14px;padding-right:20px;font-size:13px;line-height:1.9;">
+            <li>أنشئ مستودعًا جديدًا على GitHub بوضع <b>Private</b>، وفعّل خيار <b>Add a README file</b>.</li>
+            <li>من GitHub: Settings ← Developer settings ← Personal access tokens ← <b>Fine-grained tokens</b> ← Generate new token.</li>
+            <li>في Repository access اختر <b>Only select repositories</b> وحدّد هذا المستودع فقط. وفي Permissions اجعل <b>Contents</b> = <b>Read and write</b>.</li>
+            <li>انسخ الرمز وعبّئ الحقول أدناه ثم اضغط "ربط".</li>
+          </ol>
+          <div id="gh-status-box" class="ai-hint" style="margin-bottom:16px;"></div>
+          <div class="form-grid">
+            <div class="field"><label for="gh-owner">اسم المستخدم (Owner)</label><input type="text" id="gh-owner" autocomplete="off" placeholder="مثال: mansour"></div>
+            <div class="field"><label for="gh-repo">اسم المستودع (Repository)</label><input type="text" id="gh-repo" autocomplete="off" placeholder="مثال: techbox-data"></div>
+            <div class="field"><label for="gh-path">مسار الملف</label><input type="text" id="gh-path" autocomplete="off" value="techbox-reports-database.json"></div>
+            <div class="field"><label for="gh-branch">الفرع (Branch)</label><input type="text" id="gh-branch" autocomplete="off" value="main"></div>
+            <div class="field"><label for="gh-token">رمز الوصول (Token)</label><input type="password" id="gh-token" autocomplete="new-password" placeholder="github_pat_..."></div>
+          </div>
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" onclick="connectGitHub()">ربط الحفظ على GitHub</button>
+            <button type="button" class="btn btn-ghost" onclick="disconnectGitHub()">فصل عن GitHub</button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:20px;">
           <div class="card-title"><span>النسخ الاحتياطي والاستيراد</span></div>
           <p class="hint" style="margin-bottom:14px;">نسخة احتياطية إضافية يمكن تصديرها يدويًا في أي وقت (سواء كنت تستخدم ملف قاعدة البيانات أو تخزين المتصفح)، لحفظ بياناتك أو نقلها إلى جهاز آخر.</p>
           <div class="btn-row">
@@ -1144,7 +1174,7 @@
 /* =====================================================================
    قاعدة البيانات المحلية (Local Database) — مبنية على localStorage
    ===================================================================== */
-const DB_KEYS = { reports:'ctr_reports_v1', programs:'ctr_programs_v1', settings:'ctr_settings_v1', annual:'ctr_annual_reports_v1', generic:'ctr_generic_reports_v1', dashboardYears:'ctr_dashboard_years_v1', printLayout:'ctr_print_layout_v1', authHash:'ctr_auth_hash_v1' };
+const DB_KEYS = { reports:'ctr_reports_v1', programs:'ctr_programs_v1', settings:'ctr_settings_v1', annual:'ctr_annual_reports_v1', generic:'ctr_generic_reports_v1', dashboardYears:'ctr_dashboard_years_v1', printLayout:'ctr_print_layout_v1', authHash:'ctr_auth_hash_v1', github:'ctr_github_cfg_v1' };
 
 /* شعار المؤسسة الافتراضي (TechBox) — يُستخدم تلقائيًا إن لم يقم المستخدم برفع شعار آخر عبر الإعدادات.
    ملاحظة: هذا مسار نسبي لملف صورة، لذا يجب أن يكون ملف TechBox.jpeg موجودًا في نفس مجلد ملف الـ HTML
@@ -1178,6 +1208,11 @@ let dbIsDirty = false;
 let isFreshDatabase = false;
 let dbNeedsReconnect = false;
 let dbRememberedHandleForReconnect = null;
+let ghConfig = null;
+let ghSha = null;
+let ghReady = false;
+let ghSaving = false;
+let ghLoadError = '';
 const DB_FILE_SUGGESTED_NAME = 'techbox-reports-database.json';
 
 function getReports(){ return DB.reports; }
@@ -1256,7 +1291,38 @@ function normalizeDbShape(parsed){
    (queryPermission) أثناء التحميل التلقائي؛ وإن لم تكن الصلاحية ممنوحة
    بعد، يعمل النظام مؤقتًا على تخزين المتصفح ويعرض زر "إعادة الاتصال"
    الذي يطلب الصلاحية بشكل صريح عند ضغطه. */
+function loadDbFromLocalStorage(){
+  DB.reports = loadJSON(DB_KEYS.reports, []);
+  DB.programs = loadJSON(DB_KEYS.programs, []);
+  DB.settings = loadJSON(DB_KEYS.settings, defaultSettings());
+  DB.annual = loadJSON(DB_KEYS.annual, []);
+  DB.generic = loadJSON(DB_KEYS.generic, []);
+  DB.dashboardYears = loadJSON(DB_KEYS.dashboardYears, []);
+  DB.printLayout = loadJSON(DB_KEYS.printLayout, null) || defaultPrintLayout();
+}
 async function loadDatabase(){
+  /* 1) الحفظ على GitHub (إن كان مربوطًا) */
+  ghConfig = loadJSON(DB_KEYS.github, null);
+  if(ghConfig && !ghConfig.token) ghConfig = null;
+  if(ghConfig){
+    let parsed = null;
+    try{
+      const r = await ghFetchFile();
+      if(r.status === 200){
+        try{ parsed = JSON.parse(r.text); ghSha = r.sha; }
+        catch(e){ ghLoadError = 'ملف قاعدة البيانات على GitHub تالف أو غير صالح'; }
+      }else if(r.status === 404){ ghLoadError = 'ملف قاعدة البيانات غير موجود على GitHub'; }
+      else if(r.status === 401 || r.status === 403){ ghLoadError = 'رفض GitHub الوصول — تحقق من الرمز وصلاحياته'; }
+      else{ ghLoadError = 'تعذّر تحميل البيانات من GitHub'; }
+    }catch(e){ ghLoadError = 'تعذّر الاتصال بـ GitHub — تحقق من الإنترنت'; }
+    if(parsed){ DB = normalizeDbShape(parsed); ghReady = true; ghLoadError = ''; return; }
+    /* تعذّر التحميل: نعرض النسخة المحلية فقط، ولا نرفع شيئًا إلى GitHub حتى تنجح إعادة المحاولة (حتى لا نكتب فوق بياناتك هناك) */
+    isFreshDatabase = false;
+    loadDbFromLocalStorage();
+    return;
+  }
+
+  /* 2) ملف مستقل على الجهاز (File System Access API) */
   const handle = await getRememberedFileHandle();
   if(handle){
     try{
@@ -1276,14 +1342,10 @@ async function loadDatabase(){
       dbRememberedHandleForReconnect = handle;
     }
   }
+
+  /* 3) تخزين المتصفح المحلي */
   isFreshDatabase = localStorage.getItem(DB_KEYS.programs) === null;
-  DB.reports = loadJSON(DB_KEYS.reports, []);
-  DB.programs = loadJSON(DB_KEYS.programs, []);
-  DB.settings = loadJSON(DB_KEYS.settings, defaultSettings());
-  DB.annual = loadJSON(DB_KEYS.annual, []);
-  DB.generic = loadJSON(DB_KEYS.generic, []);
-  DB.dashboardYears = loadJSON(DB_KEYS.dashboardYears, []);
-  DB.printLayout = loadJSON(DB_KEYS.printLayout, null) || defaultPrintLayout();
+  loadDbFromLocalStorage();
 }
 
 /* يُستدعى بضغطة زر من المستخدم (الإعدادات) لإعادة طلب صلاحية الوصول
@@ -1312,15 +1374,44 @@ function scheduleDbSave(){
   dbIsDirty = true;
   updateDbStatusIndicator('saving');
   clearTimeout(dbSaveTimer);
-  dbSaveTimer = setTimeout(flushDbSave, 700);
+  dbSaveTimer = setTimeout(flushDbSave, (ghConfig && ghReady) ? 3000 : 700);
 }
 async function flushDbSaveNow(){
   dbIsDirty = true;
   clearTimeout(dbSaveTimer);
+  while(ghSaving){ await new Promise(r=>setTimeout(r,100)); }
   await flushDbSave();
 }
 async function flushDbSave(){
   if(!dbIsDirty) return;
+
+  /* الحفظ على GitHub: عملية رفع واحدة في كل مرة، وإن حدثت تعديلات أثناءها تُرفع بعدها */
+  if(ghConfig && ghReady){
+    if(ghSaving) return;
+    ghSaving = true;
+    dbIsDirty = false;
+    let failed = false;
+    try{
+      await ghPushDb();
+      updateDbStatusIndicator('saved-github');
+    }catch(err){
+      if(err.status === 409 || (err.status === 422 && /sha/i.test(err.message || ''))){
+        failed = !(await ghResolveConflict());
+      }else{
+        failed = true;
+        updateDbStatusIndicator('error');
+        toast((err.status === 401 || err.status === 403)
+          ? 'رفض GitHub الحفظ — تحقق من الرمز وصلاحياته'
+          : 'تعذّر الحفظ على GitHub — ستُعاد المحاولة عند التعديل التالي', 'error');
+      }
+      if(failed){ persistToLocalStorage(); dbIsDirty = true; }
+    }finally{
+      ghSaving = false;
+    }
+    if(dbIsDirty && !failed) scheduleDbSave();
+    return;
+  }
+
   dbIsDirty = false;
   if(dbFileHandle){
     try{
@@ -1394,11 +1485,13 @@ async function createDatabaseFile(){
     toast('هذا المتصفح لا يدعم ربط ملف قاعدة بيانات مستقل. يُرجى استخدام Chrome أو Edge لهذه الميزة', 'error');
     return;
   }
+  if(ghConfig && !confirm('النظام مربوط حاليًا بـ GitHub. ربط ملف محلي سيُلغي الحفظ على GitHub. هل تريد المتابعة؟')) return;
   try{
     const handle = await window.showSaveFilePicker({
       suggestedName: DB_FILE_SUGGESTED_NAME,
       types: [{ description:'ملف قاعدة بيانات JSON', accept:{'application/json':['.json']} }]
     });
+    ghClearConfig();
     dbFileHandle = handle;
     dbNeedsReconnect = false;
     await rememberFileHandle(handle);
@@ -1412,6 +1505,7 @@ async function openDatabaseFile(){
     toast('هذا المتصفح لا يدعم ربط ملف قاعدة بيانات مستقل. يُرجى استخدام Chrome أو Edge لهذه الميزة', 'error');
     return;
   }
+  if(ghConfig && !confirm('النظام مربوط حاليًا بـ GitHub. ربط ملف محلي سيُلغي الحفظ على GitHub. هل تريد المتابعة؟')) return;
   try{
     const [handle] = await window.showOpenFilePicker({
       types: [{ description:'ملف قاعدة بيانات JSON', accept:{'application/json':['.json']} }]
@@ -1423,6 +1517,7 @@ async function openDatabaseFile(){
     catch(e){ toast('صيغة الملف غير صحيحة — تأكد أنه ملف قاعدة بيانات JSON صالح', 'error'); return; }
     if(!confirm('سيتم استبدال البيانات المعروضة حاليًا ببيانات هذا الملف. هل تريد المتابعة؟')) return;
     DB = normalizeDbShape(parsed);
+    ghClearConfig();
     dbFileHandle = handle;
     dbNeedsReconnect = false;
     await rememberFileHandle(handle);
@@ -1448,11 +1543,16 @@ function updateDbStatusIndicator(state){
   if(state === 'saving') el.textContent = 'جارٍ الحفظ...';
   else if(state === 'saved-file') el.textContent = '✓ تم الحفظ في ملف قاعدة البيانات — ' + time;
   else if(state === 'saved-local') el.textContent = '✓ تم الحفظ في تخزين المتصفح المحلي — ' + time;
+  else if(state === 'saved-github') el.textContent = '✓ تم الحفظ على GitHub — ' + time;
   else if(state === 'error') el.textContent = '⚠️ حدث خطأ أثناء الحفظ';
 }
 function renderDatabaseSettingsCard(){
   const box = document.getElementById('db-status-box');
   if(!box) return;
+  if(ghConfig){
+    box.innerHTML = `☁️ الحفظ يتم حاليًا على <b>GitHub</b> (راجع بطاقة GitHub أدناه). ربط ملف محلي سيُلغي الحفظ على GitHub.<br><span id="db-save-status" class="hint"></span>`;
+    return;
+  }
   if(dbFileHandle){
     box.innerHTML = `✅ متصل بملف قاعدة بيانات مستقل: <b>${escapeHtml(dbFileHandle.name || 'ملف محدد')}</b><br><span id="db-save-status" class="hint"></span>`;
   }else if(dbNeedsReconnect){
@@ -1463,6 +1563,202 @@ function renderDatabaseSettingsCard(){
     box.innerHTML = `💾 يعمل النظام حاليًا على تخزين المتصفح المحلي (هذا المتصفح لا يدعم ربط ملف قاعدة بيانات مستقل).<br><span id="db-save-status" class="hint"></span>`;
   }else{
     box.innerHTML = `💾 يعمل النظام حاليًا على تخزين المتصفح المحلي. لم يتم ربط ملف قاعدة بيانات مستقل بعد.<br><span id="db-save-status" class="hint"></span>`;
+  }
+}
+
+/* =====================================================================
+   الحفظ على GitHub — ملف JSON داخل مستودع خاص (Private) عبر GitHub API.
+   رمز الوصول يُحفظ في متصفح هذا الجهاز فقط (ليس داخل ملف القاعدة ولا في كود الصفحة).
+   يرفض النظام الربط بأي مستودع عام (Public) حمايةً للبيانات.
+   ===================================================================== */
+function b64EncodeUtf8(str){
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  const chunk = 0x8000;
+  for(let i = 0; i < bytes.length; i += chunk){
+    bin += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+  }
+  return btoa(bin);
+}
+function b64DecodeUtf8(b64){
+  const bin = atob(String(b64).replace(/\s/g, ''));
+  const bytes = new Uint8Array(bin.length);
+  for(let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+function ghEncodePath(p){
+  return String(p).split('/').map(encodeURIComponent).join('/');
+}
+async function ghRequest(cfg, url, opts){
+  opts = opts || {};
+  const headers = {
+    'Authorization': 'Bearer ' + cfg.token,
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28'
+  };
+  if(opts.body) headers['Content-Type'] = 'application/json';
+  const res = await fetch('https://api.github.com' + url, {
+    method: opts.method || 'GET', headers: headers, body: opts.body, cache: 'no-store'
+  });
+  let json = null;
+  try{ json = await res.json(); }catch(e){ /* قد لا يوجد جسم للرد */ }
+  return { status: res.status, json: json };
+}
+async function ghFetchFile(cfg){
+  cfg = cfg || ghConfig;
+  const base = '/repos/' + cfg.owner + '/' + cfg.repo;
+  const r = await ghRequest(cfg, base + '/contents/' + ghEncodePath(cfg.path) + '?ref=' + encodeURIComponent(cfg.branch));
+  if(r.status !== 200) return { status: r.status, message: r.json && r.json.message };
+  if(!r.json || Array.isArray(r.json)) return { status: 400, message: 'المسار يشير إلى مجلد وليس ملفًا' };
+  let b64 = r.json.content;
+  if(!b64 || r.json.encoding !== 'base64'){
+    /* الملفات الأكبر من 1 ميجابايت لا يرجع محتواها في الرد الأول، فنقرؤها كـ blob */
+    const b = await ghRequest(cfg, base + '/git/blobs/' + r.json.sha);
+    if(b.status !== 200) return { status: b.status, message: b.json && b.json.message };
+    b64 = b.json.content;
+  }
+  return { status: 200, text: b64DecodeUtf8(b64), sha: r.json.sha };
+}
+async function ghPushDb(){
+  const cfg = ghConfig;
+  const body = {
+    message: 'تحديث قاعدة البيانات — ' + new Date().toISOString(),
+    content: b64EncodeUtf8(JSON.stringify(DB)),
+    branch: cfg.branch
+  };
+  if(ghSha) body.sha = ghSha;
+  const r = await ghRequest(cfg, '/repos/' + cfg.owner + '/' + cfg.repo + '/contents/' + ghEncodePath(cfg.path),
+                            { method:'PUT', body: JSON.stringify(body) });
+  if(r.status === 200 || r.status === 201){
+    ghSha = r.json && r.json.content ? r.json.content.sha : ghSha;
+    return;
+  }
+  const err = new Error((r.json && r.json.message) || ('HTTP ' + r.status));
+  err.status = r.status;
+  throw err;
+}
+/* تعارض: الملف على GitHub تغيّر من مكان آخر منذ آخر تحميل */
+async function ghResolveConflict(){
+  let r;
+  try{ r = await ghFetchFile(); }
+  catch(e){ toast('تعذّر الاتصال بـ GitHub لحل التعارض', 'error'); return false; }
+  if(r.status !== 200){ toast('تعذّر قراءة الملف من GitHub لحل التعارض', 'error'); return false; }
+  const overwrite = confirm('تم تعديل ملف قاعدة البيانات على GitHub من مكان آخر (جهاز أو متصفح آخر) منذ آخر مرة حمّلته.\n\nموافق = الكتابة فوق نسخة GitHub بنسختك الحالية (تُفقد تعديلات المكان الآخر).\nإلغاء = تحميل نسخة GitHub وتجاهل تعديلاتك الأخيرة غير المرفوعة.');
+  if(overwrite){
+    ghSha = r.sha;
+    try{ await ghPushDb(); updateDbStatusIndicator('saved-github'); return true; }
+    catch(e){ toast('تعذّر الحفظ على GitHub', 'error'); return false; }
+  }
+  try{ DB = normalizeDbShape(JSON.parse(r.text)); }
+  catch(e){ toast('ملف GitHub تالف', 'error'); return false; }
+  ghSha = r.sha;
+  switchView(currentView);
+  toast('تم تحميل أحدث نسخة من GitHub');
+  return true;
+}
+function ghClearConfig(){
+  try{ localStorage.removeItem(DB_KEYS.github); }catch(e){}
+  ghConfig = null; ghReady = false; ghSha = null; ghLoadError = '';
+  renderGitHubSettingsCard();
+  renderDatabaseSettingsCard();
+}
+async function connectGitHub(){
+  const val = id => (document.getElementById(id).value || '').trim();
+  const owner = val('gh-owner'), repo = val('gh-repo'), token = val('gh-token');
+  const branch = val('gh-branch') || 'main';
+  const path = (val('gh-path') || 'techbox-reports-database.json').replace(/^\/+/, '');
+  if(!owner || !repo || !token){ toast('يرجى تعبئة اسم المستخدم واسم المستودع والرمز', 'error'); return; }
+  if(!/^[A-Za-z0-9_.-]+$/.test(owner) || !/^[A-Za-z0-9_.-]+$/.test(repo)){ toast('اسم المستخدم أو المستودع غير صالح', 'error'); return; }
+  if(path.indexOf('..') !== -1){ toast('مسار الملف غير صالح', 'error'); return; }
+  const cfg = { owner: owner, repo: repo, branch: branch, path: path, token: token };
+
+  toast('جارٍ الاتصال بـ GitHub...');
+  let repoRes;
+  try{ repoRes = await ghRequest(cfg, '/repos/' + owner + '/' + repo); }
+  catch(e){ toast('تعذّر الاتصال بـ GitHub — تحقق من الإنترنت', 'error'); return; }
+  if(repoRes.status === 401){ toast('الرمز غير صالح أو منتهي', 'error'); return; }
+  if(repoRes.status === 404){ toast('المستودع غير موجود، أو أن الرمز لا يملك صلاحية الوصول إليه', 'error'); return; }
+  if(repoRes.status !== 200){ toast('تعذّر التحقق من المستودع (رمز الخطأ ' + repoRes.status + ')', 'error'); return; }
+  if(repoRes.json.private !== true){
+    alert('تم رفض الربط: هذا المستودع عام (Public) ويمكن لأي شخص قراءة بياناتك.\n\nأنشئ مستودعًا خاصًا (Private) واربط النظام به.');
+    return;
+  }
+  if(repoRes.json.permissions && repoRes.json.permissions.push === false){
+    toast('الرمز لا يملك صلاحية الكتابة (Contents: Read and write)', 'error'); return;
+  }
+
+  let fileRes;
+  try{ fileRes = await ghFetchFile(cfg); }
+  catch(e){ toast('تعذّر الاتصال بـ GitHub — تحقق من الإنترنت', 'error'); return; }
+
+  if(fileRes.status === 200){
+    let parsed;
+    try{ parsed = JSON.parse(fileRes.text); }
+    catch(e){ toast('الملف الموجود على GitHub ليس ملف قاعدة بيانات JSON صالحًا', 'error'); return; }
+    if(!confirm('يوجد ملف بهذا المسار على GitHub. سيتم تحميل بياناته واستبدال البيانات المعروضة حاليًا. هل تريد المتابعة؟')) return;
+    DB = normalizeDbShape(parsed);
+    ghSha = fileRes.sha;
+    ghConfig = cfg; ghReady = true; ghLoadError = '';
+  }else if(fileRes.status === 404){
+    if(!confirm('لا يوجد ملف بهذا المسار في المستودع. سيتم إنشاؤه الآن ببياناتك الحالية. هل تريد المتابعة؟')) return;
+    ghSha = null; ghConfig = cfg; ghReady = true;
+    try{ await ghPushDb(); }
+    catch(e){
+      ghConfig = null; ghReady = false; ghSha = null;
+      toast('تعذّر إنشاء الملف على GitHub: ' + (e.message || ''), 'error');
+      return;
+    }
+  }else{
+    toast('تعذّر قراءة الملف من GitHub (رمز الخطأ ' + fileRes.status + ')', 'error'); return;
+  }
+
+  /* إلغاء أي ربط بملف محلي (الوجهتان لا تعملان معًا) */
+  dbFileHandle = null; dbNeedsReconnect = false; dbRememberedHandleForReconnect = null;
+  await forgetRememberedFileHandle();
+  /* بعد الربط تصبح النسخة المحلية مطابقة لـ GitHub، فنلغي أي حفظ كان مجدولًا قبل الربط حتى لا يُنشأ إصدار مكرر */
+  clearTimeout(dbSaveTimer); dbIsDirty = false;
+  saveJSON(DB_KEYS.github, cfg);
+  document.getElementById('gh-token').value = '';
+  renderGitHubSettingsCard();
+  renderDatabaseSettingsCard();
+  switchView(currentView);
+  toast('تم ربط النظام بمستودع GitHub الخاص بنجاح');
+}
+async function disconnectGitHub(){
+  if(!ghConfig){ toast('النظام غير مربوط بـ GitHub', 'error'); return; }
+  if(!confirm('سيتم فصل النظام عن GitHub والعودة لتخزين المتصفح المحلي (تُحفظ نسخة من بياناتك الحالية في المتصفح أولًا). الملف الموجود على GitHub يبقى كما هو. هل تريد المتابعة؟')) return;
+  persistToLocalStorage();
+  ghClearConfig();
+  toast('تم الفصل عن GitHub — يعمل النظام الآن على تخزين المتصفح المحلي');
+}
+async function retryGitHubLoad(){
+  if(!ghConfig){ return; }
+  let r;
+  try{ r = await ghFetchFile(); }
+  catch(e){ toast('تعذّر الاتصال بـ GitHub — تحقق من الإنترنت', 'error'); return; }
+  if(r.status !== 200){ toast('تعذّر التحميل من GitHub (رمز الخطأ ' + r.status + ')', 'error'); return; }
+  let parsed;
+  try{ parsed = JSON.parse(r.text); }
+  catch(e){ toast('ملف GitHub تالف أو غير صالح', 'error'); return; }
+  if(!confirm('سيتم استبدال البيانات المعروضة (بما فيها أي تعديلات لم تُرفع) بنسخة GitHub. هل تريد المتابعة؟')) return;
+  DB = normalizeDbShape(parsed);
+  ghSha = r.sha; ghReady = true; ghLoadError = '';
+  clearTimeout(dbSaveTimer); dbIsDirty = false;
+  renderGitHubSettingsCard();
+  renderDatabaseSettingsCard();
+  switchView(currentView);
+  toast('تم تحميل البيانات من GitHub');
+}
+function renderGitHubSettingsCard(){
+  const box = document.getElementById('gh-status-box');
+  if(!box) return;
+  if(ghConfig && ghReady){
+    box.innerHTML = '✅ متصل بمستودع GitHub الخاص: <b>' + escapeHtml(ghConfig.owner + '/' + ghConfig.repo) + '</b><br>الملف: <b>' + escapeHtml(ghConfig.path) + '</b> — الفرع: <b>' + escapeHtml(ghConfig.branch) + '</b>';
+  }else if(ghConfig){
+    box.innerHTML = '⚠️ ' + escapeHtml(ghLoadError || 'لم يتم تحميل البيانات من GitHub') + '. الحفظ على GitHub متوقف حاليًا حمايةً لبياناتك هناك.<br>' +
+      '<button type="button" class="btn btn-gold btn-sm" style="margin-top:8px;" onclick="retryGitHubLoad()">إعادة المحاولة</button>';
+  }else{
+    box.innerHTML = '☁️ غير مربوط بـ GitHub. يعمل النظام حاليًا على تخزين المتصفح أو ملف محلي.';
   }
 }
 
@@ -1684,6 +1980,9 @@ function computeDashboardStats(year){
    ===================================================================== */
 function computeAlerts(){
   const alerts = [];
+  if(ghConfig && !ghReady){
+    alerts.push({ level:'danger', icon:'☁️', text:(ghLoadError || 'لم يتم تحميل البيانات من GitHub') + ' — الحفظ على GitHub متوقف. أعد المحاولة من الإعدادات.' });
+  }
   const now = new Date();
   const currentYm = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
   const prevDate = new Date(now.getFullYear(), now.getMonth()-1, 1);
@@ -3986,6 +4285,7 @@ function renderSettingsView(){
   renderLogoPreview(s.logoDataUrl);
   renderSettingsCustomYears();
   renderDatabaseSettingsCard();
+  renderGitHubSettingsCard();
 }
 function renderSettingsCustomYears(){
   const container = document.getElementById('settings-custom-years-list');
@@ -4308,7 +4608,7 @@ function importBackup(file){
   reader.readAsText(file);
 }
 async function wipeAllData(){
-  if(!confirm('سيتم حذف جميع التقارير والبرامج والإعدادات نهائيًا (من المتصفح أو من ملف قاعدة البيانات المربوط). هل أنت متأكد؟')) return;
+  if(!confirm('سيتم حذف جميع التقارير والبرامج والإعدادات نهائيًا (من المتصفح أو ملف قاعدة البيانات المربوط أو GitHub). هل أنت متأكد؟')) return;
   if(!confirm('تأكيد أخير: هذا الإجراء لا يمكن التراجع عنه. هل تريد المتابعة؟')) return;
   DB = { reports:[], programs:[], settings:defaultSettings(), annual:[], generic:[], dashboardYears:[], printLayout:defaultPrintLayout() };
   await flushDbSaveNow();
@@ -4671,7 +4971,17 @@ function initializeApp(){
   seedIfFirstRun();
   updateSidebarBrand();
   switchView('dashboard');
+  if(ghConfig && !ghReady && ghLoadError){
+    toast('⚠️ ' + ghLoadError + ' — الحفظ على GitHub متوقف. أعد المحاولة من الإعدادات.', 'error');
+  }
 }
+
+window.addEventListener('beforeunload', e=>{
+  if(dbIsDirty || ghSaving){ e.preventDefault(); e.returnValue = ''; return ''; }
+});
+window.addEventListener('pagehide', ()=>{
+  if(dbIsDirty && !dbFileHandle && !(ghConfig && ghReady)) persistToLocalStorage();
+});
 
 (async function bootstrapApp(){
   await loadDatabase();
